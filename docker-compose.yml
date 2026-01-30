@@ -1,19 +1,23 @@
+# Openclaw 中文版 Docker Compose 配置
+# 使用方法: docker compose up -d openclaw-cn-gateway
+
 services:
-  clawdbot-gateway:
-    image: ${CLAWDBOT_IMAGE:-clawdbot:local}
+  # 网关服务 - 主要的后台服务
+  openclaw-cn-gateway:
+    image: ${OPENCLAW_IMAGE:-openclaw-cn:local}
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
     volumes:
-      - ${CLAWDBOT_CONFIG_DIR}:/home/node/.clawdbot
-      - ${CLAWDBOT_WORKSPACE_DIR}:/home/node/clawd
+      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR}:/home/node/clawd
     ports:
-      - "${CLAWDBOT_GATEWAY_PORT:-18789}:18789"
-      - "${CLAWDBOT_BRIDGE_PORT:-18790}:18790"
+      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
+      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
     init: true
     restart: unless-stopped
     command:
@@ -22,13 +26,14 @@ services:
         "dist/index.js",
         "gateway",
         "--bind",
-        "${CLAWDBOT_GATEWAY_BIND:-lan}",
+        "${OPENCLAW_GATEWAY_BIND:-lan}",
         "--port",
-        "${CLAWDBOT_GATEWAY_PORT:-18789}"
+        "${OPENCLAW_GATEWAY_PORT:-18789}"
       ]
 
-  clawdbot-cli:
-    image: ${CLAWDBOT_IMAGE:-clawdbot:local}
+  # CLI 服务 - 用于交互式命令
+  openclaw-cn-cli:
+    image: ${OPENCLAW_IMAGE:-openclaw-cn:local}
     environment:
       HOME: /home/node
       TERM: xterm-256color
@@ -37,8 +42,8 @@ services:
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE}
     volumes:
-      - ${CLAWDBOT_CONFIG_DIR}:/home/node/.clawdbot
-      - ${CLAWDBOT_WORKSPACE_DIR}:/home/node/clawd
+      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR}:/home/node/clawd
     stdin_open: true
     tty: true
     init: true
