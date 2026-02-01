@@ -18,8 +18,25 @@ export function getFeishuClient(accountIdOrAppId?: string, explicitAppSecret?: s
   const accountId = isAppId ? undefined : accountIdOrAppId || DEFAULT_ACCOUNT_ID;
 
   if (!appSecret && feishuCfg?.accounts) {
-    // Try to get from accounts config
-    if (accountId && feishuCfg.accounts[accountId]) {
+    if (isAppId) {
+      // When given an appId, find the account with matching appId
+      for (const [, acc] of Object.entries(feishuCfg.accounts)) {
+        if (acc.appId === accountIdOrAppId) {
+          appId = acc.appId;
+          appSecret = acc.appSecret;
+          break;
+        }
+      }
+      // If not found in accounts, use the appId directly (secret from first account as fallback)
+      if (!appSecret) {
+        appId = accountIdOrAppId;
+        const firstKey = Object.keys(feishuCfg.accounts)[0];
+        if (firstKey) {
+          appSecret = feishuCfg.accounts[firstKey].appSecret;
+        }
+      }
+    } else if (accountId && feishuCfg.accounts[accountId]) {
+      // Try to get from accounts config by accountId
       const acc = feishuCfg.accounts[accountId];
       appId = acc.appId;
       appSecret = acc.appSecret;
@@ -32,11 +49,6 @@ export function getFeishuClient(accountIdOrAppId?: string, explicitAppSecret?: s
         appSecret = acc.appSecret;
       }
     }
-  }
-
-  // If accountIdOrAppId is an appId, use it directly
-  if (isAppId) {
-    appId = accountIdOrAppId;
   }
 
   // Fallback to top-level feishu config (for backward compatibility)

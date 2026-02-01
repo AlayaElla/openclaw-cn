@@ -237,7 +237,7 @@ export async function processFeishuMessage(
     Surface: "feishu",
     Timestamp: Number(message.create_time),
     MessageSid: message.message_id,
-    AccountId: appId,
+    AccountId: accountId,
     OriginatingChannel: "feishu",
     OriginatingTo: chatId,
     // Media fields (similar to Telegram)
