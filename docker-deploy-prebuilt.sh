@@ -271,5 +271,5 @@ echo "   查看日志:  docker compose -f $COMPOSE_FILE logs -f openclaw-cn-gate
 echo "   停止服务: docker compose -f $COMPOSE_FILE down"
 echo "   重启服务: docker compose -f $COMPOSE_FILE restart openclaw-cn-gateway"
 echo ""
-echo "📚 更多信息: https://docs.clawd.org.cn"
+echo "📚 更多信息: https://clawd.org.cn"
 echo ""
