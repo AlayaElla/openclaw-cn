@@ -2,6 +2,14 @@
 
 Docs: https://docs.clawd.bot
 
+## 2026.2.3
+
+### 🔧 修复（Fixes）
+
+- Packaging: 修复 npm 包缺少 feishu 扩展 dist 目录的问题，导致 onboard 选择本地飞书插件时加载失败
+
+---
+
 ## 2026.2.2
 
 ### 🚨 安全更新（Security）
