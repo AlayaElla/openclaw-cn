@@ -14,6 +14,7 @@ import {
 import { resolveFeishuMedia, type FeishuMediaRef } from "./download.js";
 import { readFeishuAllowFromStore, upsertFeishuPairingRequest } from "./pairing-store.js";
 import { sendMessageFeishu } from "./send.js";
+import { FeishuStreamingSession } from "./streaming-card.js";
 
 const logger = getChildLogger({ module: "feishu-message" });
 
@@ -224,6 +225,12 @@ export async function processFeishuMessage(
 
   const senderName = sender?.sender_id?.user_id || "unknown";
 
+  // Streaming mode support
+  const streamingEnabled = feishuCfg.streaming !== false; // Default to true
+  const streamingSession = streamingEnabled ? new FeishuStreamingSession(client) : null;
+  let streamingStarted = false;
+  let lastPartialText = "";
+
   // Context construction
   const ctx = {
     Body: bodyText,
@@ -251,9 +258,16 @@ export async function processFeishuMessage(
     ctx,
     cfg,
     dispatcherOptions: {
-      deliver: async (payload) => {
+      deliver: async (payload, info) => {
         const hasMedia = payload.mediaUrl || (payload.mediaUrls && payload.mediaUrls.length > 0);
         if (!payload.text && !hasMedia) return;
+
+        // If streaming was active, close it with the final text
+        if (streamingSession?.isActive() && info?.kind === "final") {
+          await streamingSession.close(payload.text);
+          streamingStarted = false;
+          return; // Card already contains the final text
+        }
 
         // Handle media URLs
         const mediaUrls = payload.mediaUrls?.length
@@ -263,6 +277,11 @@ export async function processFeishuMessage(
             : [];
 
         if (mediaUrls.length > 0) {
+          // Close streaming session before sending media
+          if (streamingSession?.isActive()) {
+            await streamingSession.close();
+            streamingStarted = false;
+          }
           // Send each media item
           for (let i = 0; i < mediaUrls.length; i++) {
             const mediaUrl = mediaUrls[i];
@@ -278,25 +297,56 @@ export async function processFeishuMessage(
             );
           }
         } else if (payload.text) {
-          // Text-only message
-          await sendMessageFeishu(
-            client,
-            chatId,
-            { text: payload.text },
-            {
-              msgType: "text",
-              receiveIdType: "chat_id",
-            },
-          );
+          // If streaming wasn't used, send as regular message
+          if (!streamingSession?.isActive()) {
+            await sendMessageFeishu(
+              client,
+              chatId,
+              { text: payload.text },
+              {
+                msgType: "text",
+                receiveIdType: "chat_id",
+              },
+            );
+          }
         }
       },
       onError: (err) => {
-        logger.error(`Reply error: ${err}`);
+        logger.error(`Reply error: ${String(err)}`);
+        // Clean up streaming session on error
+        if (streamingSession?.isActive()) {
+          streamingSession.close().catch(() => {});
+        }
       },
-      onReplyStart: () => {},
+      onReplyStart: async () => {
+        // Start streaming card when reply generation begins
+        if (streamingSession && !streamingStarted) {
+          try {
+            await streamingSession.start(chatId, "chat_id");
+            streamingStarted = true;
+            logger.debug(`Started streaming card for chat ${chatId}`);
+          } catch (err) {
+            logger.warn(`Failed to start streaming card: ${String(err)}`);
+            // Continue without streaming
+          }
+        }
+      },
     },
     replyOptions: {
       disableBlockStreaming: feishuCfg.blockStreaming,
+      onPartialReply: streamingSession
+        ? async (payload) => {
+            if (!streamingSession.isActive() || !payload.text) return;
+            if (payload.text === lastPartialText) return;
+            lastPartialText = payload.text;
+            await streamingSession.update(payload.text);
+          }
+        : undefined,
     },
   });
+
+  // Ensure streaming session is closed on completion
+  if (streamingSession?.isActive()) {
+    await streamingSession.close();
+  }
 }

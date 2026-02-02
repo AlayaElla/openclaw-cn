@@ -14,6 +14,7 @@ export type ResolvedFeishuConfig = {
   textChunkLimit: number;
   chunkMode: "length" | "newline";
   blockStreaming: boolean;
+  streaming: boolean;
   mediaMaxMb: number;
   groups: Record<string, FeishuGroupConfig>;
 };
@@ -45,6 +46,7 @@ export function resolveFeishuConfig(params: {
     textChunkLimit: firstDefined(accountCfg?.textChunkLimit, feishuCfg?.textChunkLimit) ?? 2000,
     chunkMode: firstDefined(accountCfg?.chunkMode, feishuCfg?.chunkMode) ?? "length",
     blockStreaming: firstDefined(accountCfg?.blockStreaming, feishuCfg?.blockStreaming) ?? true,
+    streaming: firstDefined((accountCfg as any)?.streaming, (feishuCfg as any)?.streaming) ?? true,
     mediaMaxMb: firstDefined(accountCfg?.mediaMaxMb, feishuCfg?.mediaMaxMb) ?? 30,
     groups: { ...(feishuCfg?.groups ?? {}), ...(accountCfg?.groups ?? {}) },
   };

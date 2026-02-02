@@ -69,6 +69,12 @@ export type FeishuAccountConfig = {
   chunkMode?: "length" | "newline";
   /** Disable block streaming for this account. */
   blockStreaming?: boolean;
+  /**
+   * Enable streaming card mode for replies (shows typing indicator).
+   * When true, replies are streamed via Feishu's CardKit API with typewriter effect.
+   * Default: true.
+   */
+  streaming?: boolean;
   /** Media max size in MB. */
   mediaMaxMb?: number;
   /** Retry policy for outbound Feishu API calls. */
