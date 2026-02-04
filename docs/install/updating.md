@@ -18,9 +18,19 @@ read_when:
 npm i -g openclaw-cn@latest && openclaw-cn doctor && openclaw-cn gateway restart
 ```
 
+**Linux / macOS（淘宝镜像源，国内推荐）：**
+```bash
+npm i -g openclaw-cn@latest --registry=https://registry.npmmirror.com && openclaw-cn doctor && openclaw-cn gateway restart
+```
+
 **Windows（PowerShell）：**
 ```powershell
 npm i -g openclaw-cn@latest; openclaw-cn doctor; openclaw-cn gateway restart
+```
+
+**Windows（PowerShell，淘宝镜像源）：**
+```powershell
+npm i -g openclaw-cn@latest --registry=https://registry.npmmirror.com; openclaw-cn doctor; openclaw-cn gateway restart
 ```
 
 **WSL 用户注意**：WSL 环境需要启用 systemd 才能使用 `gateway restart`。如果遇到 "Failed to connect to bus" 错误，请参考 [WSL 启用 systemd 指南](/gateway/troubleshooting#web-ui-1006-no-reason) 或使用前台模式运行：
