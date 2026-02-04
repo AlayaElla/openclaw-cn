@@ -68,19 +68,19 @@ describe("text-commands", () => {
     });
 
     it("should parse Chinese command aliases without args", () => {
-      expect(parseTextCommand("新对话")).toEqual({ type: "command", key: "new" });
-      expect(parseTextCommand("停止")).toEqual({ type: "command", key: "stop" });
-      expect(parseTextCommand("模型")).toEqual({ type: "command", key: "model" });
-      expect(parseTextCommand("状态")).toEqual({ type: "command", key: "status" });
+      expect(parseTextCommand("/新对话")).toEqual({ type: "command", key: "new" });
+      expect(parseTextCommand("/停止")).toEqual({ type: "command", key: "stop" });
+      expect(parseTextCommand("/模型")).toEqual({ type: "command", key: "model" });
+      expect(parseTextCommand("/状态")).toEqual({ type: "command", key: "status" });
     });
 
     it("should parse Chinese command aliases with args", () => {
-      expect(parseTextCommand("模型 claude-opus")).toEqual({
+      expect(parseTextCommand("/模型 claude-opus")).toEqual({
         type: "command",
         key: "model",
         args: "claude-opus",
       });
-      expect(parseTextCommand("思考 high")).toEqual({
+      expect(parseTextCommand("/思考 high")).toEqual({
         type: "command",
         key: "think",
         args: "high",
@@ -91,6 +91,12 @@ describe("text-commands", () => {
       expect(parseTextCommand("你好")).toEqual({ type: "none" });
       expect(parseTextCommand("hello world")).toEqual({ type: "none" });
       expect(parseTextCommand("这是一段普通消息")).toEqual({ type: "none" });
+    });
+
+    it("should return none for Chinese commands without slash", () => {
+      expect(parseTextCommand("新对话")).toEqual({ type: "none" });
+      expect(parseTextCommand("停止")).toEqual({ type: "none" });
+      expect(parseTextCommand("模型")).toEqual({ type: "none" });
     });
 
     it("should handle edge cases", () => {

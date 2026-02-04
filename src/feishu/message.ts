@@ -301,6 +301,8 @@ export async function processFeishuMessage(
     MediaType: media?.contentType,
     MediaUrl: media?.path,
     WasMentioned: isGroup ? wasMentioned : undefined,
+    // Command authorization - if message passed access control, sender is authorized
+    CommandAuthorized: true,
   };
 
   await dispatchReplyWithBufferedBlockDispatcher({

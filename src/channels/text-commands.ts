@@ -45,52 +45,45 @@ export function isHelpTrigger(text: string): boolean {
  * 检测并解析文本命令
  *
  * 支持的格式：
- * 1. 中文别名: "新对话"、"停止"、"模型"
- * 2. 斜杠命令: "/new"、"/stop"、"/model claude-opus"
- * 3. 帮助触发: "菜单"、"命令"、"?"
+ * 1. 斜杠命令: "/new"、"/stop"、"/model claude-opus"
+ * 2. 斜杠+中文别名: "/新对话"、"/停止"、"/模型 claude-opus"
+ * 3. 帮助触发: "菜单"、"命令"、"?" (无需斜杠)
  */
 export function parseTextCommand(text: string): TextCommandResult {
   const trimmed = text.trim();
 
-  // 检查帮助触发
+  // 检查帮助触发 (无需斜杠)
   if (isHelpTrigger(trimmed)) {
     return { type: "help" };
   }
 
-  // 检查斜杠命令
-  if (trimmed.startsWith("/")) {
-    const withoutSlash = trimmed.slice(1);
-    const spaceIndex = withoutSlash.indexOf(" ");
-
-    if (spaceIndex === -1) {
-      // 无参数: /new
-      return { type: "command", key: withoutSlash };
-    }
-
-    // 有参数: /model claude-opus
-    const key = withoutSlash.slice(0, spaceIndex);
-    const args = withoutSlash.slice(spaceIndex + 1).trim();
-    return { type: "command", key, args: args || undefined };
+  // 必须以斜杠开头
+  if (!trimmed.startsWith("/")) {
+    return { type: "none" };
   }
 
-  // 检查中文别名
-  const matchedKey = matchZhCommandAlias(trimmed);
+  const withoutSlash = trimmed.slice(1);
+  const spaceIndex = withoutSlash.indexOf(" ");
+
+  if (spaceIndex === -1) {
+    // 无参数: /new 或 /新对话
+    const matchedKey = matchZhCommandAlias(withoutSlash);
+    if (matchedKey) {
+      return { type: "command", key: matchedKey };
+    }
+    return { type: "command", key: withoutSlash };
+  }
+
+  // 有参数: /model claude-opus 或 /模型 claude-opus
+  const commandPart = withoutSlash.slice(0, spaceIndex);
+  const args = withoutSlash.slice(spaceIndex + 1).trim();
+
+  const matchedKey = matchZhCommandAlias(commandPart);
   if (matchedKey) {
-    return { type: "command", key: matchedKey };
+    return { type: "command", key: matchedKey, args: args || undefined };
   }
 
-  // 检查带参数的中文命令 (如 "模型 claude-opus")
-  const spaceIndex = trimmed.indexOf(" ");
-  if (spaceIndex > 0) {
-    const potentialAlias = trimmed.slice(0, spaceIndex);
-    const matchedKeyWithArgs = matchZhCommandAlias(potentialAlias);
-    if (matchedKeyWithArgs) {
-      const args = trimmed.slice(spaceIndex + 1).trim();
-      return { type: "command", key: matchedKeyWithArgs, args: args || undefined };
-    }
-  }
-
-  return { type: "none" };
+  return { type: "command", key: commandPart, args: args || undefined };
 }
 
 /**

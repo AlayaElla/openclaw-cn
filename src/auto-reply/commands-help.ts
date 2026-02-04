@@ -83,7 +83,7 @@ export function generateCommandHelpText(options: HelpTextOptions = {}): string {
   }
 
   const header = "📋 可用命令列表\n";
-  const footer = '\n💡 直接输入中文命令名或 "/命令" 即可使用';
+  const footer = '\n💡 输入 "/命令名" 即可使用（如 /新对话、/模型）';
 
   return header + "\n" + sections.join("\n\n") + footer;
 }
