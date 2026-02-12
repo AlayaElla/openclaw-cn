@@ -2,8 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import { __testing } from "./web-search.js";
 
-const { inferPerplexityBaseUrlFromApiKey, resolvePerplexityBaseUrl, normalizeFreshness } =
-  __testing;
+const {
+  inferPerplexityBaseUrlFromApiKey,
+  resolvePerplexityBaseUrl,
+  normalizeFreshness,
+  normalizeBraveLang,
+} = __testing;
 
 describe("web_search perplexity baseUrl defaults", () => {
   it("detects a Perplexity key prefix", () => {
@@ -50,6 +54,35 @@ describe("web_search perplexity baseUrl defaults", () => {
     expect(resolvePerplexityBaseUrl(undefined, "config", "weird-key")).toBe(
       "https://openrouter.ai/api/v1",
     );
+  });
+});
+
+describe("normalizeBraveLang", () => {
+  it("maps bare 'zh' to 'zh-hans'", () => {
+    expect(normalizeBraveLang("zh")).toBe("zh-hans");
+    expect(normalizeBraveLang("ZH")).toBe("zh-hans");
+  });
+
+  it("maps zh-cn / zh-sg to zh-hans", () => {
+    expect(normalizeBraveLang("zh-cn")).toBe("zh-hans");
+    expect(normalizeBraveLang("zh-sg")).toBe("zh-hans");
+  });
+
+  it("maps zh-tw / zh-hk to zh-hant", () => {
+    expect(normalizeBraveLang("zh-tw")).toBe("zh-hant");
+    expect(normalizeBraveLang("zh-hk")).toBe("zh-hant");
+  });
+
+  it("passes through already-correct codes", () => {
+    expect(normalizeBraveLang("zh-hans")).toBe("zh-hans");
+    expect(normalizeBraveLang("en")).toBe("en");
+    expect(normalizeBraveLang("de")).toBe("de");
+  });
+
+  it("returns undefined for empty / undefined", () => {
+    expect(normalizeBraveLang(undefined)).toBeUndefined();
+    expect(normalizeBraveLang("")).toBeUndefined();
+    expect(normalizeBraveLang("  ")).toBeUndefined();
   });
 });
 

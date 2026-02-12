@@ -32,6 +32,16 @@ const SEARCH_CACHE = new Map<string, CacheEntry<Record<string, unknown>>>();
 const BRAVE_FRESHNESS_SHORTCUTS = new Set(["pd", "pw", "pm", "py"]);
 const BRAVE_FRESHNESS_RANGE = /^(\d{4}-\d{2}-\d{2})to(\d{4}-\d{2}-\d{2})$/;
 
+// Brave Search API requires specific subtags for certain languages.
+// e.g. "zh" is rejected (422); must be "zh-hans" or "zh-hant".
+const BRAVE_LANG_ALIASES: Record<string, string> = {
+  zh: "zh-hans",
+  "zh-cn": "zh-hans",
+  "zh-sg": "zh-hans",
+  "zh-tw": "zh-hant",
+  "zh-hk": "zh-hant",
+};
+
 const WebSearchSchema = Type.Object({
   query: Type.String({ description: "Search query string." }),
   count: Type.Optional(
@@ -49,7 +59,8 @@ const WebSearchSchema = Type.Object({
   ),
   search_lang: Type.Optional(
     Type.String({
-      description: "ISO language code for search results (e.g., 'de', 'en', 'fr').",
+      description:
+        "ISO language code for search results (e.g., 'de', 'en', 'fr'). For Chinese use 'zh-hans' (Simplified) or 'zh-hant' (Traditional); bare 'zh' is auto-mapped to 'zh-hans'.",
     }),
   ),
   ui_lang: Type.Optional(
@@ -245,6 +256,14 @@ function normalizeFreshness(value: string | undefined): string | undefined {
   return `${start}to${end}`;
 }
 
+/** Normalize language codes to Brave-accepted values (e.g. "zh" → "zh-hans"). */
+function normalizeBraveLang(lang: string | undefined): string | undefined {
+  if (!lang) return undefined;
+  const lower = lang.trim().toLowerCase();
+  if (!lower) return undefined;
+  return BRAVE_LANG_ALIASES[lower] ?? lower;
+}
+
 function isValidIsoDate(value: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const [year, month, day] = value.split("-").map((part) => Number.parseInt(part, 10));
@@ -362,10 +381,13 @@ async function runWebSearch(params: {
     url.searchParams.set("country", params.country);
   }
   if (params.search_lang) {
-    url.searchParams.set("search_lang", params.search_lang);
+    url.searchParams.set(
+      "search_lang",
+      normalizeBraveLang(params.search_lang) ?? params.search_lang,
+    );
   }
   if (params.ui_lang) {
-    url.searchParams.set("ui_lang", params.ui_lang);
+    url.searchParams.set("ui_lang", normalizeBraveLang(params.ui_lang) ?? params.ui_lang);
   }
   if (params.freshness) {
     url.searchParams.set("freshness", params.freshness);
@@ -486,4 +508,5 @@ export const __testing = {
   inferPerplexityBaseUrlFromApiKey,
   resolvePerplexityBaseUrl,
   normalizeFreshness,
+  normalizeBraveLang,
 } as const;
