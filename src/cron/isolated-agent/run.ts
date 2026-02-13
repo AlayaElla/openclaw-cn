@@ -354,6 +354,8 @@ export async function runCronIsolatedAgentTurn(params: {
           sessionKey: agentSessionKey,
           messageChannel,
           agentAccountId: resolvedDelivery.accountId,
+          // Inject job delivery target so message tool defaults to the configured channel when AI omits channel/to
+          currentChannelId: resolvedDelivery.to ?? undefined,
           sessionFile,
           workspaceDir,
           config: cfgWithAgentDefaults,
