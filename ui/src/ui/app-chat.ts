@@ -158,7 +158,7 @@ export async function refreshChat(host: ChatHost) {
     loadSessions(host as unknown as ClawdbotApp),
     refreshChatAvatar(host),
   ]);
-  scheduleChatScroll(host as unknown as Parameters<typeof scheduleChatScroll>[0], true);
+  scheduleChatScroll(host as unknown as Parameters<typeof scheduleChatScroll>[0]);
 }
 
 export const flushChatQueueForEvent = flushChatQueue;
