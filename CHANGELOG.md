@@ -5,6 +5,7 @@ Docs: https://docs.clawd.bot
 ## 0.1.5
 
 > 🔒 **安全加固**：同步上游 73 项安全修复（P0-A + P0-B + P0-C），覆盖 v2026.2.1 ~ v2026.2.14 全部安全补丁。
+> 🐛 **关键 Bug 修复**：同步上游 48 项关键 Bug 修复（P1-A ~ P1-D），涵盖会话/网关/定时任务/心跳/内存/CJK 等核心稳定性问题。
 
 ### 🔒 安全（Security）
 
@@ -62,6 +63,68 @@ Docs: https://docs.clawd.bot
 - **Telnyx webhook**：集中化 Telnyx webhook 验证，缺少公钥时默认拒绝（upstream `f47584fec`, `29b587e73`）
 - **Twilio webhook**：在 ngrok 回环模式下强制 Twilio 签名验证（upstream `ff11d8793`）
 - **Archive 提取加固**：加固 archive 提取 + 浏览器下载 + Signal 安装（upstream `3aa94afcf`）
+
+### 🐛 关键 Bug 修复（Critical Bugs）
+
+#### P1-A：会话与网关稳定性（24 项）
+
+- **压缩后失忆**：修复会话压缩后上下文丢失问题（upstream `0cf93b8fa`）
+- **上下文溢出截断**：修复上下文溢出时工具结果被截断问题（upstream `0deb8b0da`）
+- **会话重置中止**：在 sessions.reset 前中止活跃运行（upstream `3efb75212`）
+- **transcript 路径解析**：修复 transcript 路径解析逻辑（upstream `cab0abf52`）
+- **压缩安全超时**：为压缩操作添加安全超时机制（upstream `c0cd3c3c0`）
+- **进程日志分页**：修复进程日志分页问题（upstream `dec685970`）
+- **压缩超时死锁**：修复压缩超时导致的死锁问题（upstream `e6f67d5f3`）
+- **空流故障转移**：修复空流响应的故障转移逻辑（upstream `eb846c95b`）
+- **预写式投递队列**：新增预写式投递队列防止消息丢失（upstream `207e2c5af`）
+- **重启前排空活跃对话**：重启前排空活跃对话防止消息丢失（upstream `acb9cbb89`）
+- **安装时自动生成 token**：修复 gateway install 时自动生成认证 token（upstream `94d685816`）
+- **防止 undefined token**：防止 auth 配置中出现 undefined token（upstream `f8c91b3c5`）
+- **EPIPE 异步处理**：修复关闭时的异步 EPIPE 错误处理（upstream `2ef4ac08c`）
+- **全局安装 Dashboard 资源**：修复全局安装时 Dashboard 资源缺失问题（upstream `8d5094e1f`）
+- **SIGUSR1 后清理状态**：清理 SIGUSR1 进程内重启后的过时状态（upstream `4e9f933e8`）
+- **通知队列发送失败保留**：发送失败时保留通知队列项目（upstream `2a8360928`）
+- **WebSocket 5MB 限制**：提升 WebSocket 最大负载至 5MB 以支持图片上传（upstream `626a1d069`）
+- **多 Agent 用量发现**：修复多 Agent sessions.usage 发现逻辑（upstream `9271fcb3d`）
+- **agentId transcript 路径**：使用 session key agentId 解析 transcript 路径（upstream `dc3c73361`）
+- **agentId 贯穿状态/用量路径**：将 agentId 贯穿到所有状态和用量查询路径（upstream `990413534`）
+- **归档旧 transcript**：在 /new 和 /reset 时归档旧 transcript 文件（upstream `31537c669`）
+- **停止钳制 totalTokens**：停止钳制派生的 totalTokens 值（upstream `fd076eb43`）
+- **防止子进程 FD 泄漏**：修复子进程清理时的文件描述符泄漏（upstream `4c350bc4c`）
+- **防止缓存 TTL 双重压缩**：防止 cache-ttl 条目绕过保护导致的双重压缩（upstream `dcb921944`）
+
+#### P1-B：定时任务与心跳（16 项）
+
+- **Cron 调度回归修复**：修复 cron 调度和提醒投递回归问题（upstream `821520a05`）
+- **防止跳过到期任务**：防止 recomputeNextRuns 跳过到期任务（upstream `313e2f2e8`）
+- **Cron 心跳可靠性**：改进 cron 心跳可靠性（upstream `40e23b05f`）
+- **legacy atMs 字段**：处理调度中的 legacy atMs 字段（upstream `b0befb5f5`）
+- **防止跳过执行**：防止 nextRunAtMs 推进时跳过 cron 执行（upstream `39e3d58fe`）
+- **主 session 任务传递 agentId**：修复主 session 任务传递 agentId 给 heartbeat（upstream `04e3a66f9`）
+- **活跃任务执行时重置定时器**：在活跃任务执行期间 onTimer 触发时重新设置定时器（upstream `ace5e33ce`）
+- **防止同时触发重复**：防止多个任务同时触发时重复执行（upstream `dd6047d99`）
+- **调度错误隔离**：隔离调度错误防止一个坏任务影响所有任务（upstream `04f695e56`）
+- **心跳调度器异常处理**：防止 runOnce 抛出异常时心跳调度器死亡（upstream `5147656d6`）
+- **防止 list/status 跳过 cron**：防止 list/status 静默跳过周期性 cron 任务（upstream `c60844931`）
+- **心跳定时器改进**：改进心跳定时器逻辑（upstream `7b89e68d1`）
+- **心跳唤醒竞态**：防止唤醒处理器竞态导致心跳调度器静默死亡（upstream `40aff672c`）
+- **豁免唤醒/hook 原因**：豁免 wake 和 hook 原因的空心跳跳过逻辑（upstream `7f0d6b1fc`）
+- **HEARTBEAT_OK 清理**：忽略 HEARTBEAT_OK token 周围的非单词字符（upstream `f9379ecee`）
+- **HEARTBEAT.md 自动创建**：工作区初始化时不再自动创建 HEARTBEAT.md（upstream `386bb0c61`）
+
+#### P1-C：内存泄漏（7 项）
+
+- **诊断会话状态模块**：拆分诊断会话状态模块减少内存占用（upstream `0dec23450`）
+- **Agent 运行序列跟踪**：限定 Agent 运行序列跟踪器增长（upstream `fc8f59261`）
+- **中止内存映射**：限定中止回调内存映射增长（upstream `414b7db8a`）
+- **Slack 线程缓存**：限定 Slack 线程启动器缓存增长（upstream `6d0cd54ac`）
+- **目录缓存内存**：限定出站目录缓存内存增长（upstream `48fef2786`）
+- **远程节点缓存**：断开连接时清理远程节点缓存（upstream `dabfcbe94`）
+- **Skills 监视器 FD**：避免 skills 监视器文件描述符耗尽（upstream `0e046f61a`）
+
+#### P1-D：CJK 兼容（1 项）
+
+- **Voice Wake CJK 崩溃**：防止 CJK 触发词导致 Voice Wake 崩溃（upstream `c32b92b7a`）
 
 ---
 
