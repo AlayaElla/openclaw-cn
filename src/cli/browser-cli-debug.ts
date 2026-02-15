@@ -149,7 +149,10 @@ export function registerBrowserDebugCommands(
   trace
     .command("stop")
     .description("停止追踪记录并生成 .zip 文件")
-    .option("--out <path>", "追踪 ZIP 文件的输出路径")
+    .option(
+      "--out <path>",
+      "Output path within openclaw temp dir (e.g. trace.zip or /tmp/openclaw/trace.zip)",
+    )
     .option("--target-id <id>", "CDP 目标 ID（或唯一前缀）")
     .action(async (opts, cmd) => {
       const parent = parentOpts(cmd);

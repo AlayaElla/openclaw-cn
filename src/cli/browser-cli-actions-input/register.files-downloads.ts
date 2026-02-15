@@ -54,7 +54,10 @@ export function registerBrowserFilesAndDownloadsCommands(
   browser
     .command("waitfordownload")
     .description("Wait for the next download (and save it)")
-    .argument("[path]", "Save path (default: /tmp/clawdbot/downloads/...)")
+    .argument(
+      "[path]",
+      "Save path within openclaw temp downloads dir (default: /tmp/openclaw/downloads/...; fallback: os.tmpdir()/openclaw/downloads/...)",
+    )
     .option("--target-id <id>", "CDP target id (or unique prefix)")
     .option(
       "--timeout-ms <ms>",
@@ -85,7 +88,10 @@ export function registerBrowserFilesAndDownloadsCommands(
     .command("download")
     .description("Click a ref and save the resulting download")
     .argument("<ref>", "Ref id from snapshot to click")
-    .argument("<path>", "Save path")
+    .argument(
+      "<path>",
+      "Save path within openclaw temp downloads dir (e.g. report.pdf or /tmp/openclaw/downloads/report.pdf)",
+    )
     .option("--target-id <id>", "CDP target id (or unique prefix)")
     .option(
       "--timeout-ms <ms>",
