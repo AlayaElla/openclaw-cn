@@ -274,22 +274,25 @@ jobs:
           TAGS=$(cat /tmp/new-releases.json | jq -r '[.[].tag] | join(", ")')
 
           if [ "$MERGE_COUNT" -gt 0 ] || [ "$OPTIONAL_COUNT" -gt 0 ]; then
+            printf '%s\n' \
+              "## 上游新 Release 分析" \
+              "" \
+              "上游发布了新版本: **$TAGS**" \
+              "" \
+              "### 自动分析结果" \
+              "- 🔴 需要合并: **${MERGE_COUNT}** 项" \
+              "- 🔵 可选合并: **${OPTIONAL_COUNT}** 项" \
+              "" \
+              "### 下一步" \
+              "1. 查看 [UPSTREAM_MERGE_CHECKLIST.md](../blob/main/UPSTREAM_MERGE_CHECKLIST.md) 中新增的条目" \
+              "2. 使用 AI Agent 逐条处理合并" \
+              "3. 处理完成后标记 ✅" \
+              "" \
+              "### 优先级建议" \
+              "优先处理 P0 (安全) 和 P1 (关键修复) 条目。" \
+              > /tmp/issue-body.md
             gh issue create \
               --title "上游更新: $TAGS - ${MERGE_COUNT} 项需合并, ${OPTIONAL_COUNT} 项可选" \
-              --body "## 上游新 Release 分析
-
-上游发布了新版本: **$TAGS**
-
-### 自动分析结果
-- 🔴 需要合并: **${MERGE_COUNT}** 项
-- 🔵 可选合并: **${OPTIONAL_COUNT}** 项
-
-### 下一步
-1. 查看 [UPSTREAM_MERGE_CHECKLIST.md](../blob/main/UPSTREAM_MERGE_CHECKLIST.md) 中新增的条目
-2. 使用 AI Agent 逐条处理合并
-3. 处理完成后标记 ✅
-
-### 优先级建议
-优先处理 P0 (安全) 和 P1 (关键修复) 条目。" \
+              --body-file /tmp/issue-body.md \
               --label "upstream,merge-needed"
           fi
