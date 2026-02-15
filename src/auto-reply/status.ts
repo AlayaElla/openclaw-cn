@@ -1,18 +1,26 @@
 import fs from "node:fs";
-
+import type { SkillCommandSpec } from "../agents/skills.js";
+import type { OpenClawConfig } from "../config/config.js";
+import type { MediaUnderstandingDecision } from "../media-understanding/types.js";
+import type { CommandCategory } from "./commands-registry.types.js";
+import type { ElevatedLevel, ReasoningLevel, ThinkLevel, VerboseLevel } from "./thinking.js";
 import { lookupContextTokens } from "../agents/context.js";
 import { DEFAULT_CONTEXT_TOKENS, DEFAULT_MODEL, DEFAULT_PROVIDER } from "../agents/defaults.js";
 import { resolveModelAuthMode } from "../agents/model-auth.js";
 import { resolveConfiguredModelRef } from "../agents/model-selection.js";
 import { resolveSandboxRuntimeStatus } from "../agents/sandbox.js";
 import { derivePromptTokens, normalizeUsage, type UsageLike } from "../agents/usage.js";
-import type { ClawdbotConfig } from "../config/config.js";
 import {
   resolveMainSessionKey,
   resolveSessionFilePath,
+  resolveSessionFilePathOptions,
   type SessionEntry,
   type SessionScope,
 } from "../config/sessions.js";
+import { formatTimeAgo } from "../infra/format-time/format-relative.ts";
+import { resolveCommitHash } from "../infra/git-commit.js";
+import { listPluginCommands } from "../plugins/commands.js";
+import { resolveAgentIdFromSessionKey } from "../routing/session-key.js";
 import {
   getTtsMaxLength,
   getTtsProvider,
@@ -21,7 +29,6 @@ import {
   resolveTtsConfig,
   resolveTtsPrefsPath,
 } from "../tts/tts.js";
-import { resolveCommitHash } from "../infra/git-commit.js";
 import {
   estimateUsageCost,
   formatTokenCount as formatTokenCountShared,
@@ -29,13 +36,13 @@ import {
   resolveModelCostConfig,
 } from "../utils/usage-format.js";
 import { VERSION } from "../version.js";
-import { listChatCommands, listChatCommandsForConfig } from "./commands-registry.js";
-import { listPluginCommands } from "../plugins/commands.js";
-import type { SkillCommandSpec } from "../agents/skills.js";
-import type { ElevatedLevel, ReasoningLevel, ThinkLevel, VerboseLevel } from "./thinking.js";
-import type { MediaUnderstandingDecision } from "../media-understanding/types.js";
+import {
+  listChatCommands,
+  listChatCommandsForConfig,
+  type ChatCommandDefinition,
+} from "./commands-registry.js";
 
-type AgentConfig = Partial<NonNullable<NonNullable<ClawdbotConfig["agents"]>["defaults"]>>;
+type AgentConfig = Partial<NonNullable<NonNullable<OpenClawConfig["agents"]>["defaults"]>>;
 
 export const formatTokenCount = formatTokenCountShared;
 
@@ -49,11 +56,13 @@ type QueueStatus = {
 };
 
 type StatusArgs = {
-  config?: ClawdbotConfig;
+  config?: OpenClawConfig;
   agent: AgentConfig;
+  agentId?: string;
   sessionEntry?: SessionEntry;
   sessionKey?: string;
   sessionScope?: SessionScope;
+  sessionStorePath?: string;
   groupActivation?: "mention" | "always";
   resolvedThink?: ThinkLevel;
   resolvedVerbose?: VerboseLevel;
@@ -79,16 +88,24 @@ function resolveRuntimeLabel(
       sessionKey,
     });
     const sandboxMode = runtimeStatus.mode ?? "off";
-    if (sandboxMode === "off") return "direct";
+    if (sandboxMode === "off") {
+      return "direct";
+    }
     const runtime = runtimeStatus.sandboxed ? "docker" : sessionKey ? "direct" : "unknown";
     return `${runtime}/${sandboxMode}`;
   }
 
   const sandboxMode = args.agent?.sandbox?.mode ?? "off";
-  if (sandboxMode === "off") return "direct";
+  if (sandboxMode === "off") {
+    return "direct";
+  }
   const sandboxed = (() => {
-    if (!sessionKey) return false;
-    if (sandboxMode === "all") return true;
+    if (!sessionKey) {
+      return false;
+    }
+    if (sandboxMode === "all") {
+      return true;
+    }
     if (args.config) {
       return resolveSandboxRuntimeStatus({
         cfg: args.config,
@@ -120,41 +137,41 @@ const formatTokens = (total: number | null | undefined, contextTokens: number | 
 export const formatContextUsageShort = (
   total: number | null | undefined,
   contextTokens: number | null | undefined,
-) => `上下文 ${formatTokens(total, contextTokens ?? null)}`;
-
-const formatAge = (ms?: number | null) => {
-  if (!ms || ms < 0) return "未知";
-  const minutes = Math.round(ms / 60_000);
-  if (minutes < 1) return "刚刚";
-  if (minutes < 60) return `${minutes}分钟前`;
-  const hours = Math.round(minutes / 60);
-  if (hours < 48) return `${hours}小时前`;
-  const days = Math.round(hours / 24);
-  return `${days}天前`;
-};
+) => `Context ${formatTokens(total, contextTokens ?? null)}`;
 
 const formatQueueDetails = (queue?: QueueStatus) => {
-  if (!queue) return "";
-  const depth = typeof queue.depth === "number" ? `深度 ${queue.depth}` : null;
+  if (!queue) {
+    return "";
+  }
+  const depth = typeof queue.depth === "number" ? `depth ${queue.depth}` : null;
   if (!queue.showDetails) {
     return depth ? ` (${depth})` : "";
   }
   const detailParts: string[] = [];
-  if (depth) detailParts.push(depth);
+  if (depth) {
+    detailParts.push(depth);
+  }
   if (typeof queue.debounceMs === "number") {
     const ms = Math.max(0, Math.round(queue.debounceMs));
     const label =
-      ms >= 1000 ? `${ms % 1000 === 0 ? ms / 1000 : (ms / 1000).toFixed(1)}秒` : `${ms}毫秒`;
-    detailParts.push(`防抖 ${label}`);
+      ms >= 1000 ? `${ms % 1000 === 0 ? ms / 1000 : (ms / 1000).toFixed(1)}s` : `${ms}ms`;
+    detailParts.push(`debounce ${label}`);
   }
-  if (typeof queue.cap === "number") detailParts.push(`上限 ${queue.cap}`);
-  if (queue.dropPolicy) detailParts.push(`丢弃 ${queue.dropPolicy}`);
+  if (typeof queue.cap === "number") {
+    detailParts.push(`cap ${queue.cap}`);
+  }
+  if (queue.dropPolicy) {
+    detailParts.push(`drop ${queue.dropPolicy}`);
+  }
   return detailParts.length ? ` (${detailParts.join(" · ")})` : "";
 };
 
 const readUsageFromSessionLog = (
   sessionId?: string,
   sessionEntry?: SessionEntry,
+  agentId?: string,
+  sessionKey?: string,
+  storePath?: string,
 ):
   | {
       input: number;
@@ -165,9 +182,24 @@ const readUsageFromSessionLog = (
     }
   | undefined => {
   // Transcripts are stored at the session file path (fallback: ~/.openclaw/sessions/<SessionId>.jsonl)
-  if (!sessionId) return undefined;
-  const logPath = resolveSessionFilePath(sessionId, sessionEntry);
-  if (!fs.existsSync(logPath)) return undefined;
+  if (!sessionId) {
+    return undefined;
+  }
+  let logPath: string;
+  try {
+    const resolvedAgentId =
+      agentId ?? (sessionKey ? resolveAgentIdFromSessionKey(sessionKey) : undefined);
+    logPath = resolveSessionFilePath(
+      sessionId,
+      sessionEntry,
+      resolveSessionFilePathOptions({ agentId: resolvedAgentId, storePath }),
+    );
+  } catch {
+    return undefined;
+  }
+  if (!fs.existsSync(logPath)) {
+    return undefined;
+  }
 
   try {
     const lines = fs.readFileSync(logPath, "utf-8").split(/\n+/);
@@ -178,7 +210,9 @@ const readUsageFromSessionLog = (
     let lastUsage: ReturnType<typeof normalizeUsage> | undefined;
 
     for (const line of lines) {
-      if (!line.trim()) continue;
+      if (!line.trim()) {
+        continue;
+      }
       try {
         const parsed = JSON.parse(line) as {
           message?: {
@@ -190,19 +224,25 @@ const readUsageFromSessionLog = (
         };
         const usageRaw = parsed.message?.usage ?? parsed.usage;
         const usage = normalizeUsage(usageRaw);
-        if (usage) lastUsage = usage;
+        if (usage) {
+          lastUsage = usage;
+        }
         model = parsed.message?.model ?? parsed.model ?? model;
       } catch {
         // ignore bad lines
       }
     }
 
-    if (!lastUsage) return undefined;
+    if (!lastUsage) {
+      return undefined;
+    }
     input = lastUsage.input ?? 0;
     output = lastUsage.output ?? 0;
     promptTokens = derivePromptTokens(lastUsage) ?? lastUsage.total ?? input + output;
     const total = lastUsage.total ?? promptTokens + output;
-    if (promptTokens === 0 && total === 0) return undefined;
+    if (promptTokens === 0 && total === 0) {
+      return undefined;
+    }
     return { input, output, promptTokens, total, model };
   } catch {
     return undefined;
@@ -210,14 +250,18 @@ const readUsageFromSessionLog = (
 };
 
 const formatUsagePair = (input?: number | null, output?: number | null) => {
-  if (input == null && output == null) return null;
+  if (input == null && output == null) {
+    return null;
+  }
   const inputLabel = typeof input === "number" ? formatTokenCount(input) : "?";
   const outputLabel = typeof output === "number" ? formatTokenCount(output) : "?";
-  return `🧮 Token: ${inputLabel} 输入 / ${outputLabel} 输出`;
+  return `🧮 Tokens: ${inputLabel} in / ${outputLabel} out`;
 };
 
 const formatMediaUnderstandingLine = (decisions?: MediaUnderstandingDecision[]) => {
-  if (!decisions || decisions.length === 0) return null;
+  if (!decisions || decisions.length === 0) {
+    return null;
+  }
   const parts = decisions
     .map((decision) => {
       const count = decision.attachments.length;
@@ -248,16 +292,22 @@ const formatMediaUnderstandingLine = (decisions?: MediaUnderstandingDecision[]) 
       return null;
     })
     .filter((part): part is string => part != null);
-  if (parts.length === 0) return null;
-  if (parts.every((part) => part.endsWith(" none"))) return null;
+  if (parts.length === 0) {
+    return null;
+  }
+  if (parts.every((part) => part.endsWith(" none"))) {
+    return null;
+  }
   return `📎 Media: ${parts.join(" · ")}`;
 };
 
 const formatVoiceModeLine = (
-  config?: ClawdbotConfig,
+  config?: OpenClawConfig,
   sessionEntry?: SessionEntry,
 ): string | null => {
-  if (!config) return null;
+  if (!config) {
+    return null;
+  }
   const ttsConfig = resolveTtsConfig(config);
   const prefsPath = resolveTtsPrefsPath(ttsConfig);
   const autoMode = resolveTtsAutoMode({
@@ -265,7 +315,9 @@ const formatVoiceModeLine = (
     prefsPath,
     sessionAuto: sessionEntry?.ttsAuto,
   });
-  if (autoMode === "off") return null;
+  if (autoMode === "off") {
+    return null;
+  }
   const provider = getTtsProvider(ttsConfig, prefsPath);
   const maxLength = getTtsMaxLength(prefsPath);
   const summarize = isSummarizationEnabled(prefsPath) ? "on" : "off";
@@ -280,7 +332,7 @@ export function buildStatusMessage(args: StatusArgs): string {
       agents: {
         defaults: args.agent ?? {},
       },
-    } as ClawdbotConfig,
+    } as OpenClawConfig,
     defaultProvider: DEFAULT_PROVIDER,
     defaultModel: DEFAULT_MODEL,
   });
@@ -299,18 +351,30 @@ export function buildStatusMessage(args: StatusArgs): string {
   // Prefer prompt-size tokens from the session transcript when it looks larger
   // (cached prompt tokens are often missing from agent meta/store).
   if (args.includeTranscriptUsage) {
-    const logUsage = readUsageFromSessionLog(entry?.sessionId, entry);
+    const logUsage = readUsageFromSessionLog(
+      entry?.sessionId,
+      entry,
+      args.agentId,
+      args.sessionKey,
+      args.sessionStorePath,
+    );
     if (logUsage) {
       const candidate = logUsage.promptTokens || logUsage.total;
       if (!totalTokens || totalTokens === 0 || candidate > totalTokens) {
         totalTokens = candidate;
       }
-      if (!model) model = logUsage.model ?? model;
+      if (!model) {
+        model = logUsage.model ?? model;
+      }
       if (!contextTokens && logUsage.model) {
         contextTokens = lookupContextTokens(logUsage.model) ?? contextTokens;
       }
-      if (!inputTokens || inputTokens === 0) inputTokens = logUsage.input;
-      if (!outputTokens || outputTokens === 0) outputTokens = logUsage.output;
+      if (!inputTokens || inputTokens === 0) {
+        inputTokens = logUsage.input;
+      }
+      if (!outputTokens || outputTokens === 0) {
+        outputTokens = logUsage.output;
+      }
     }
   }
 
@@ -327,8 +391,8 @@ export function buildStatusMessage(args: StatusArgs): string {
 
   const updatedAt = entry?.updatedAt;
   const sessionLine = [
-    `会话: ${args.sessionKey ?? "未知"}`,
-    typeof updatedAt === "number" ? `更新于 ${formatAge(now - updatedAt)}` : "无活动",
+    `Session: ${args.sessionKey ?? "unknown"}`,
+    typeof updatedAt === "number" ? `updated ${formatTimeAgo(now - updatedAt)}` : "no activity",
   ]
     .filter(Boolean)
     .join(" • ");
@@ -343,33 +407,33 @@ export function buildStatusMessage(args: StatusArgs): string {
     : undefined;
 
   const contextLine = [
-    `上下文: ${formatTokens(totalTokens, contextTokens ?? null)}`,
-    `🧹 压缩次数: ${entry?.compactionCount ?? 0}`,
+    `Context: ${formatTokens(totalTokens, contextTokens ?? null)}`,
+    `🧹 Compactions: ${entry?.compactionCount ?? 0}`,
   ]
     .filter(Boolean)
     .join(" · ");
 
-  const queueMode = args.queue?.mode ?? "未知";
+  const queueMode = args.queue?.mode ?? "unknown";
   const queueDetails = formatQueueDetails(args.queue);
   const verboseLabel =
-    verboseLevel === "full" ? "详细:完整" : verboseLevel === "on" ? "详细" : null;
+    verboseLevel === "full" ? "verbose:full" : verboseLevel === "on" ? "verbose" : null;
   const elevatedLabel =
     elevatedLevel && elevatedLevel !== "off"
       ? elevatedLevel === "on"
-        ? "提权"
-        : `提权:${elevatedLevel}`
+        ? "elevated"
+        : `elevated:${elevatedLevel}`
       : null;
   const optionParts = [
-    `运行时: ${runtime.label}`,
-    `思考: ${thinkLevel}`,
+    `Runtime: ${runtime.label}`,
+    `Think: ${thinkLevel}`,
     verboseLabel,
-    reasoningLevel !== "off" ? `推理: ${reasoningLevel}` : null,
+    reasoningLevel !== "off" ? `Reasoning: ${reasoningLevel}` : null,
     elevatedLabel,
   ];
   const optionsLine = optionParts.filter(Boolean).join(" · ");
   const activationParts = [
-    groupActivationValue ? `👥 激活: ${groupActivationValue}` : null,
-    `🪢 队列: ${queueMode}${queueDetails}`,
+    groupActivationValue ? `👥 Activation: ${groupActivationValue}` : null,
+    `🪢 Queue: ${queueMode}${queueDetails}`,
   ];
   const activationLine = activationParts.filter(Boolean).join(" · ");
 
@@ -397,13 +461,13 @@ export function buildStatusMessage(args: StatusArgs): string {
       : undefined;
   const costLabel = showCost && hasUsage ? formatUsd(cost) : undefined;
 
-  const modelLabel = model ? `${provider}/${model}` : "未知";
+  const modelLabel = model ? `${provider}/${model}` : "unknown";
   const authLabel = authLabelValue ? ` · 🔑 ${authLabelValue}` : "";
-  const modelLine = `🧠 模型: ${modelLabel}${authLabel}`;
+  const modelLine = `🧠 Model: ${modelLabel}${authLabel}`;
   const commit = resolveCommitHash();
-  const versionLine = `🦞 Clawdbot ${VERSION}${commit ? ` (${commit})` : ""}`;
+  const versionLine = `🦞 OpenClaw ${VERSION}${commit ? ` (${commit})` : ""}`;
   const usagePair = formatUsagePair(inputTokens, outputTokens);
-  const costLine = costLabel ? `💵 成本: ${costLabel}` : null;
+  const costLine = costLabel ? `💵 Cost: ${costLabel}` : null;
   const usageCostLine =
     usagePair && costLine ? `${usagePair} · ${costLine}` : (usagePair ?? costLine);
   const mediaLine = formatMediaUnderstandingLine(args.mediaDecisions);
@@ -427,61 +491,213 @@ export function buildStatusMessage(args: StatusArgs): string {
     .join("\n");
 }
 
-export function buildHelpMessage(cfg?: ClawdbotConfig): string {
-  const options = [
-    "/think <级别>",
-    "/verbose on|full|off",
-    "/reasoning on|off",
-    "/elevated on|off|ask|full",
-    "/model <ID>",
-    "/usage off|tokens|full",
-  ];
-  if (cfg?.commands?.config === true) options.push("/config show");
-  if (cfg?.commands?.debug === true) options.push("/debug show");
-  return [
-    "ℹ️ 帮助",
-    "快捷方式: /new 重置 | /compact [指令] | /restart 重启 (需启用)",
-    `选项: ${options.join(" | ")}`,
-    "技能: /skill <名称> [输入]",
-    "更多: /commands 查看所有命令",
-  ].join("\n");
+const CATEGORY_LABELS: Record<CommandCategory, string> = {
+  session: "Session",
+  options: "Options",
+  status: "Status",
+  management: "Management",
+  media: "Media",
+  tools: "Tools",
+  docks: "Docks",
+};
+
+const CATEGORY_ORDER: CommandCategory[] = [
+  "session",
+  "options",
+  "status",
+  "management",
+  "media",
+  "tools",
+  "docks",
+];
+
+function groupCommandsByCategory(
+  commands: ChatCommandDefinition[],
+): Map<CommandCategory, ChatCommandDefinition[]> {
+  const grouped = new Map<CommandCategory, ChatCommandDefinition[]>();
+  for (const category of CATEGORY_ORDER) {
+    grouped.set(category, []);
+  }
+  for (const command of commands) {
+    const category = command.category ?? "tools";
+    const list = grouped.get(category) ?? [];
+    list.push(command);
+    grouped.set(category, list);
+  }
+  return grouped;
+}
+
+export function buildHelpMessage(cfg?: OpenClawConfig): string {
+  const lines = ["ℹ️ Help", ""];
+
+  lines.push("Session");
+  lines.push("  /new  |  /reset  |  /compact [instructions]  |  /stop");
+  lines.push("");
+
+  const optionParts = ["/think <level>", "/model <id>", "/verbose on|off"];
+  if (cfg?.commands?.config === true) {
+    optionParts.push("/config");
+  }
+  if (cfg?.commands?.debug === true) {
+    optionParts.push("/debug");
+  }
+  lines.push("Options");
+  lines.push(`  ${optionParts.join("  |  ")}`);
+  lines.push("");
+
+  lines.push("Status");
+  lines.push("  /status  |  /whoami  |  /context");
+  lines.push("");
+
+  lines.push("Skills");
+  lines.push("  /skill <name> [input]");
+
+  lines.push("");
+  lines.push("More: /commands for full list");
+
+  return lines.join("\n");
+}
+
+const COMMANDS_PER_PAGE = 8;
+
+export type CommandsMessageOptions = {
+  page?: number;
+  surface?: string;
+};
+
+export type CommandsMessageResult = {
+  text: string;
+  totalPages: number;
+  currentPage: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+};
+
+function formatCommandEntry(command: ChatCommandDefinition): string {
+  const primary = command.nativeName
+    ? `/${command.nativeName}`
+    : command.textAliases[0]?.trim() || `/${command.key}`;
+  const seen = new Set<string>();
+  const aliases = command.textAliases
+    .map((alias) => alias.trim())
+    .filter(Boolean)
+    .filter((alias) => alias.toLowerCase() !== primary.toLowerCase())
+    .filter((alias) => {
+      const key = alias.toLowerCase();
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  const aliasLabel = aliases.length ? ` (${aliases.join(", ")})` : "";
+  const scopeLabel = command.scope === "text" ? " [text]" : "";
+  return `${primary}${aliasLabel}${scopeLabel} - ${command.description}`;
+}
+
+type CommandsListItem = {
+  label: string;
+  text: string;
+};
+
+function buildCommandItems(
+  commands: ChatCommandDefinition[],
+  pluginCommands: ReturnType<typeof listPluginCommands>,
+): CommandsListItem[] {
+  const grouped = groupCommandsByCategory(commands);
+  const items: CommandsListItem[] = [];
+
+  for (const category of CATEGORY_ORDER) {
+    const categoryCommands = grouped.get(category) ?? [];
+    if (categoryCommands.length === 0) {
+      continue;
+    }
+    const label = CATEGORY_LABELS[category];
+    for (const command of categoryCommands) {
+      items.push({ label, text: formatCommandEntry(command) });
+    }
+  }
+
+  for (const command of pluginCommands) {
+    const pluginLabel = command.pluginId ? ` (${command.pluginId})` : "";
+    items.push({
+      label: "Plugins",
+      text: `/${command.name}${pluginLabel} - ${command.description}`,
+    });
+  }
+
+  return items;
+}
+
+function formatCommandList(items: CommandsListItem[]): string {
+  const lines: string[] = [];
+  let currentLabel: string | null = null;
+
+  for (const item of items) {
+    if (item.label !== currentLabel) {
+      if (lines.length > 0) {
+        lines.push("");
+      }
+      lines.push(item.label);
+      currentLabel = item.label;
+    }
+    lines.push(`  ${item.text}`);
+  }
+
+  return lines.join("\n");
 }
 
 export function buildCommandsMessage(
-  cfg?: ClawdbotConfig,
+  cfg?: OpenClawConfig,
   skillCommands?: SkillCommandSpec[],
+  options?: CommandsMessageOptions,
 ): string {
-  const lines = ["ℹ️ 斜杠命令"];
+  const result = buildCommandsMessagePaginated(cfg, skillCommands, options);
+  return result.text;
+}
+
+export function buildCommandsMessagePaginated(
+  cfg?: OpenClawConfig,
+  skillCommands?: SkillCommandSpec[],
+  options?: CommandsMessageOptions,
+): CommandsMessageResult {
+  const page = Math.max(1, options?.page ?? 1);
+  const surface = options?.surface?.toLowerCase();
+  const isTelegram = surface === "telegram";
+
   const commands = cfg
     ? listChatCommandsForConfig(cfg, { skillCommands })
     : listChatCommands({ skillCommands });
-  for (const command of commands) {
-    const primary = command.nativeName
-      ? `/${command.nativeName}`
-      : command.textAliases[0]?.trim() || `/${command.key}`;
-    const seen = new Set<string>();
-    const aliases = command.textAliases
-      .map((alias) => alias.trim())
-      .filter(Boolean)
-      .filter((alias) => alias.toLowerCase() !== primary.toLowerCase())
-      .filter((alias) => {
-        const key = alias.toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      });
-    const aliasLabel = aliases.length ? ` (别名: ${aliases.join(", ")})` : "";
-    const scopeLabel = command.scope === "text" ? " (仅文本)" : "";
-    lines.push(`${primary}${aliasLabel}${scopeLabel} - ${command.description}`);
-  }
   const pluginCommands = listPluginCommands();
-  if (pluginCommands.length > 0) {
-    lines.push("");
-    lines.push("插件命令:");
-    for (const command of pluginCommands) {
-      const pluginLabel = command.pluginId ? ` (插件: ${command.pluginId})` : "";
-      lines.push(`/${command.name}${pluginLabel} - ${command.description}`);
-    }
+  const items = buildCommandItems(commands, pluginCommands);
+
+  if (!isTelegram) {
+    const lines = ["ℹ️ Slash commands", ""];
+    lines.push(formatCommandList(items));
+    return {
+      text: lines.join("\n").trim(),
+      totalPages: 1,
+      currentPage: 1,
+      hasNext: false,
+      hasPrev: false,
+    };
   }
-  return lines.join("\n");
+
+  const totalCommands = items.length;
+  const totalPages = Math.max(1, Math.ceil(totalCommands / COMMANDS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * COMMANDS_PER_PAGE;
+  const endIndex = startIndex + COMMANDS_PER_PAGE;
+  const pageItems = items.slice(startIndex, endIndex);
+
+  const lines = [`ℹ️ Commands (${currentPage}/${totalPages})`, ""];
+  lines.push(formatCommandList(pageItems));
+
+  return {
+    text: lines.join("\n").trim(),
+    totalPages,
+    currentPage,
+    hasNext: currentPage < totalPages,
+    hasPrev: currentPage > 1,
+  };
 }

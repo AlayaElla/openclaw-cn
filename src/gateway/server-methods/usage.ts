@@ -481,11 +481,13 @@ export const usageHandlers: GatewayRequestHandlers = {
     };
 
     for (const merged of limitedEntries) {
+      const agentId = parseAgentSessionKey(merged.key)?.agentId;
       const usage = await loadSessionCostSummary({
         sessionId: merged.sessionId,
         sessionEntry: merged.storeEntry,
         sessionFile: merged.sessionFile,
         config,
+        agentId,
         startMs,
         endMs,
       });
@@ -504,7 +506,6 @@ export const usageHandlers: GatewayRequestHandlers = {
         aggregateTotals.missingCostEntries += usage.missingCostEntries;
       }
 
-      const agentId = parseAgentSessionKey(merged.key)?.agentId;
       const channel = merged.storeEntry?.channel ?? merged.storeEntry?.origin?.provider;
       const chatType = merged.storeEntry?.chatType ?? merged.storeEntry?.origin?.chatType;
 
@@ -771,6 +772,7 @@ export const usageHandlers: GatewayRequestHandlers = {
       sessionEntry: entry,
       sessionFile,
       config,
+      agentId,
       maxPoints: 200,
     });
 
@@ -814,6 +816,7 @@ export const usageHandlers: GatewayRequestHandlers = {
       sessionEntry: entry,
       sessionFile,
       config,
+      agentId,
       limit,
     });
 
