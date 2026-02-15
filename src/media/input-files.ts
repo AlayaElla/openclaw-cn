@@ -1,3 +1,4 @@
+import type { SsrFPolicy } from "../infra/net/ssrf.js";
 import { fetchWithSsrFGuard } from "../infra/net/fetch-guard.js";
 import { logWarn } from "../logger.js";
 
@@ -52,6 +53,7 @@ export type InputPdfLimits = {
 
 export type InputFileLimits = {
   allowUrl: boolean;
+  urlAllowlist?: string[];
   allowedMimes: Set<string>;
   maxBytes: number;
   maxChars: number;
@@ -62,6 +64,7 @@ export type InputFileLimits = {
 
 export type InputImageLimits = {
   allowUrl: boolean;
+  urlAllowlist?: string[];
   allowedMimes: Set<string>;
   maxBytes: number;
   maxRedirects: number;
@@ -137,11 +140,15 @@ export async function fetchWithGuard(params: {
   maxBytes: number;
   timeoutMs: number;
   maxRedirects: number;
+  policy?: SsrFPolicy;
+  auditContext?: string;
 }): Promise<InputFetchResult> {
   const { response, release } = await fetchWithSsrFGuard({
     url: params.url,
     maxRedirects: params.maxRedirects,
     timeoutMs: params.timeoutMs,
+    policy: params.policy,
+    auditContext: params.auditContext,
     init: { headers: { "User-Agent": "Clawdbot-Gateway/1.0" } },
   });
 
@@ -275,6 +282,11 @@ export async function extractImageContentFromSource(
       maxBytes: limits.maxBytes,
       timeoutMs: limits.timeoutMs,
       maxRedirects: limits.maxRedirects,
+      policy: {
+        allowPrivateNetwork: false,
+        hostnameAllowlist: limits.urlAllowlist,
+      },
+      auditContext: "openresponses.input_image",
     });
     if (!limits.allowedMimes.has(result.mimeType)) {
       throw new Error(`Unsupported image MIME type from URL: ${result.mimeType}`);
@@ -313,6 +325,11 @@ export async function extractFileContentFromSource(params: {
       maxBytes: limits.maxBytes,
       timeoutMs: limits.timeoutMs,
       maxRedirects: limits.maxRedirects,
+      policy: {
+        allowPrivateNetwork: false,
+        hostnameAllowlist: limits.urlAllowlist,
+      },
+      auditContext: "openresponses.input_file",
     });
     const parsed = parseContentType(result.contentType);
     mimeType = parsed.mimeType ?? normalizeMimeType(result.mimeType);
