@@ -2,6 +2,32 @@
 
 Docs: https://docs.clawd.bot
 
+## 0.1.5
+
+> 🔒 **安全加固**：同步上游 35 项安全修复（P0-A + P0-B），覆盖 v2026.2.1 ~ v2026.2.13 全部安全补丁。
+
+### 🔒 安全（Security）
+
+- **沙箱安全**：限制沙箱路径遍历、命令注入与进程逃逸（upstream #10531, #12803, #15269, #15325, #15336, #15399, #15410, #15536）
+- **ACP 权限加固**：阻止高风险工具通过 HTTP `/tools/invoke` 调用，新增 `DANGEROUS_ACP_TOOLS` 集合与 `resolvePermissionRequest` 审批流（upstream #15390）
+- **Canvas 认证**：限制 Canvas IP 认证仅允许私网/回环地址（upstream #14661）
+- **浏览器路径约束**：约束浏览器 trace 和下载输出路径在安全根目录内（upstream #15652）
+- **A2UI 文件安全**：使用 `openFileWithinRoot` 替代手动路径遍历检查（upstream #10525）
+- **WhatsApp 凭证权限**：强制 WhatsApp 凭证文件使用 `0o600` 权限（upstream #10529）
+- **WebSocket 日志清理**：清理 WebSocket 日志中的敏感 header 信息（upstream #15592）
+- **审计区分**：区分 webhook 与内部 hook 的审计摘要（upstream #13474）
+- **路由绑定作用域**：强制严格 binding-scope 匹配 + 角色路由支持（upstream #15274）
+- **Exec 审批流程**：为 Agent 工具执行添加两阶段审批流程（upstream #4726）
+- **Heredoc 白名单**：在允许列表安全模式下支持 heredoc 操作符（upstream #13811）
+- **Hook 去重**：修复 embedded runtime 中 `before_tool_call` 重复触发问题（upstream #15635）
+- **Tool-call ID 清理**：清理 OpenAI/Codex/Anthropic 的 tool-call ID 格式（upstream #15279）
+- **链接理解 SSRF**：修复链接理解功能的 SSRF 漏洞（upstream #649826e）
+- **安全审计**：新增 `doctor-security` 深度安全审计命令，检测 30+ 项安全配置（upstream #12803, #13129）
+- **工具配置沙箱**：强制沙箱工具配置文件验证与默认安全策略（upstream #15536）
+- **CSRF/认证**：加固 gateway HTTP 端点认证与 CSRF 防护（upstream #15399, #15410）
+
+---
+
 ## 0.1.0
 
 > 🎉 **版本号规范化**：从本版本起，openclaw-cn 采用标准语义化版本号 (Semver)，告别日期版本。
