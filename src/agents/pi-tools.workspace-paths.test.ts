@@ -2,9 +2,18 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createClawdbotCodingTools } from "./pi-tools.js";
 
+vi.mock("../plugins/tools.js", () => ({
+  getPluginToolMeta: () => undefined,
+  resolvePluginTools: () => [],
+}));
+
+vi.mock("../infra/shell-env.js", async (importOriginal) => {
+  const mod = await importOriginal<typeof import("../infra/shell-env.js")>();
+  return { ...mod, getShellPathFromLoginShell: () => null };
+});
 async function withTempDir<T>(prefix: string, fn: (dir: string) => Promise<T>) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
   try {
