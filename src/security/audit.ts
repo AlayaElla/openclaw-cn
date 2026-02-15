@@ -13,10 +13,12 @@ import {
   collectExposureMatrixFindings,
   collectHooksHardeningFindings,
   collectIncludeFilePermFindings,
+  collectInstalledSkillsCodeSafetyFindings,
   collectModelHygieneFindings,
   collectSmallModelRiskFindings,
   collectPluginsTrustFindings,
   collectSecretsInConfigFindings,
+  collectPluginsCodeSafetyFindings,
   collectStateDeepFilesystemFindings,
   collectSyncedFolderFindings,
   readConfigSnapshotForAudit,
@@ -879,6 +881,10 @@ export async function runSecurityAudit(opts: SecurityAuditOptions): Promise<Secu
     }
     findings.push(...(await collectStateDeepFilesystemFindings({ cfg, env, stateDir })));
     findings.push(...(await collectPluginsTrustFindings({ cfg, stateDir })));
+    if (opts.deep === true) {
+      findings.push(...(await collectPluginsCodeSafetyFindings({ stateDir })));
+      findings.push(...(await collectInstalledSkillsCodeSafetyFindings({ cfg, stateDir })));
+    }
   }
 
   if (opts.includeChannelSecurity !== false) {
