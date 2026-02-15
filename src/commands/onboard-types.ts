@@ -11,22 +11,27 @@ export type AuthChoice =
   | "chutes"
   | "openai-codex"
   | "openai-api-key"
-  // 新增：OpenAI兼容供应商（硅基流动、阿里云百炼、DeepSeek）的API Key选择
-  | "siliconflow-api-key"
-  | "dashscope-api-key"
-  | "deepseek-api-key"
   | "openrouter-api-key"
+  | "litellm-api-key"
   | "ai-gateway-api-key"
+  | "cloudflare-ai-gateway-api-key"
   | "moonshot-api-key"
+  | "moonshot-api-key-cn"
   | "kimi-code-api-key"
   | "synthetic-api-key"
   | "venice-api-key"
+  | "together-api-key"
   | "codex-cli"
   | "apiKey"
   | "gemini-api-key"
   | "google-antigravity"
   | "google-gemini-cli"
   | "zai-api-key"
+  | "zai-coding-global"
+  | "zai-coding-cn"
+  | "zai-global"
+  | "zai-cn"
+  | "xiaomi-api-key"
   | "minimax-cloud"
   | "minimax"
   | "minimax-api"
@@ -36,10 +41,30 @@ export type AuthChoice =
   | "github-copilot"
   | "copilot-proxy"
   | "qwen-portal"
-  | "volcengine-api-key"
-  | "xiaomi-api-key"
+  | "xai-api-key"
+  | "qianfan-api-key"
+  | "custom-api-key"
   | "skip";
-export type GatewayAuthChoice = "off" | "token" | "password";
+export type AuthChoiceGroupId =
+  | "openai"
+  | "anthropic"
+  | "google"
+  | "copilot"
+  | "openrouter"
+  | "ai-gateway"
+  | "cloudflare-ai-gateway"
+  | "moonshot"
+  | "zai"
+  | "xiaomi"
+  | "opencode-zen"
+  | "minimax"
+  | "synthetic"
+  | "venice"
+  | "qwen"
+  | "qianfan"
+  | "xai"
+  | "custom";
+export type GatewayAuthChoice = "token" | "password";
 export type ResetScope = "config" | "config+creds+sessions" | "full";
 export type GatewayBind = "loopback" | "lan" | "auto" | "custom" | "tailnet";
 export type TailscaleMode = "off" | "serve" | "funnel";
@@ -69,22 +94,28 @@ export type OnboardOptions = {
   anthropicApiKey?: string;
   openaiApiKey?: string;
   openrouterApiKey?: string;
+  litellmApiKey?: string;
   aiGatewayApiKey?: string;
+  cloudflareAiGatewayAccountId?: string;
+  cloudflareAiGatewayGatewayId?: string;
+  cloudflareAiGatewayApiKey?: string;
   moonshotApiKey?: string;
   kimiCodeApiKey?: string;
   geminiApiKey?: string;
   zaiApiKey?: string;
+  xiaomiApiKey?: string;
   minimaxApiKey?: string;
   syntheticApiKey?: string;
   veniceApiKey?: string;
+  togetherApiKey?: string;
   opencodeZenApiKey?: string;
-  // 新增：OpenAI兼容供应商API Key（非交互模式使用）
-  // 新增：OpenAI兼容供应商API Key（非交互模式使用）
-  siliconflowApiKey?: string;
-  dashscopeApiKey?: string;
-  deepseekApiKey?: string;
-  volcengineApiKey?: string;
-  xiaomiApiKey?: string;
+  xaiApiKey?: string;
+  qianfanApiKey?: string;
+  customBaseUrl?: string;
+  customApiKey?: string;
+  customModelId?: string;
+  customProviderId?: string;
+  customCompatibility?: "openai" | "anthropic";
   gatewayPort?: number;
   gatewayBind?: GatewayBind;
   gatewayAuth?: GatewayAuthChoice;
