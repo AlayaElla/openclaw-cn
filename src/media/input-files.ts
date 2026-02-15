@@ -142,7 +142,7 @@ export async function fetchWithGuard(params: {
     url: params.url,
     maxRedirects: params.maxRedirects,
     timeoutMs: params.timeoutMs,
-    headers: { "User-Agent": "Clawdbot-Gateway/1.0" },
+    init: { headers: { "User-Agent": "Clawdbot-Gateway/1.0" } },
   });
 
   try {
