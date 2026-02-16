@@ -135,5 +135,5 @@ export function formatReasoningMarkdown(text: string): string {
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => `_${line}_`);
-  return lines.length ? ["_Reasoning:_", ...lines].join("\n") : "";
+  return lines.length ? ["_推理过程:_", ...lines].join("\n") : "";
 }
