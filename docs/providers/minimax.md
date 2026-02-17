@@ -1,65 +1,60 @@
 ---
-summary: "Use MiniMax M2.1 in Clawdbot"
+summary: "在 OpenClaw 中使用 MiniMax M2.1"
 read_when:
-  - You want MiniMax models in Clawdbot
-  - You need MiniMax setup guidance
+  - 您想要在 OpenClaw 中使用 MiniMax 模型
+  - 您需要 MiniMax 设置指导
 ---
 # MiniMax
 
-MiniMax is an AI company that builds the **M2/M2.1** model family. The current
-coding-focused release is **MiniMax M2.1** (December 23, 2025), built for
-real-world complex tasks.
+MiniMax 是一家构建 **M2/M2.1** 模型系列的 AI 公司。当前专注于编码的版本是 **MiniMax M2.1**（2025年12月23日发布），专为现实世界的复杂任务而构建。
 
-Source: [MiniMax M2.1 release note](https://www.minimax.io/news/minimax-m21)
+来源：[MiniMax M2.1 发布说明](https://www.minimax.io/news/minimax-m21)
 
-## Model overview (M2.1)
+## 模型概览 (M2.1)
 
-MiniMax highlights these improvements in M2.1:
+MiniMax 在 M2.1 中强调了以下改进：
 
-- Stronger **multi-language coding** (Rust, Java, Go, C++, Kotlin, Objective-C, TS/JS).
-- Better **web/app development** and aesthetic output quality (including native mobile).
-- Improved **composite instruction** handling for office-style workflows, building on
-  interleaved thinking and integrated constraint execution.
-- **More concise responses** with lower token usage and faster iteration loops.
-- Stronger **tool/agent framework** compatibility and context management (Claude Code,
-  Droid/Factory AI, Cline, Kilo Code, Roo Code, BlackBox).
-- Higher-quality **dialogue and technical writing** outputs.
+- 更强的**多语言编码**能力（Rust、Java、Go、C++、Kotlin、Objective-C、TS/JS）。
+- 更好的**网页/应用开发**和美学输出质量（包括原生移动应用）。
+- 改进的**复合指令**处理，适用于办公风格的工作流程，基于交错思维和集成约束执行。
+- **更简洁的响应**，降低令牌使用量和更快的迭代循环。
+- 更强的**工具/代理框架**兼容性和上下文管理（Claude Code、Droid/Factory AI、Cline、Kilo Code、Roo Code、BlackBox）。
+- 更高质量的**对话和技术写作**输出。
 
 ## MiniMax M2.1 vs MiniMax M2.1 Lightning
 
-- **Speed:** Lightning is the “fast” variant in MiniMax’s pricing docs.
-- **Cost:** Pricing shows the same input cost, but Lightning has higher output cost.
-- **Coding plan routing:** The Lightning back-end isn’t directly available on the MiniMax
-  coding plan. MiniMax auto-routes most requests to Lightning, but falls back to the
-  regular M2.1 back-end during traffic spikes.
+- **速度：** Lightning 是 MiniMax 定价文档中的"快速"变体。
+- **成本：** 定价显示相同的输入成本，但 Lightning 的输出成本更高。
+- **编码计划路由：** Lightning 后端在 MiniMax
+  编码计划中无法直接使用。MiniMax 自动将大多数请求路由到 Lightning，但在流量高峰期间会回退到常规的 M2.1 后端。
 
-## Choose a setup
+## 选择设置
 
-### MiniMax OAuth (Coding Plan) — recommended
+### MiniMax OAuth（编码计划）— 推荐
 
-**Best for:** quick setup with MiniMax Coding Plan via OAuth, no API key required.
+**最适合：** 通过 OAuth 快速设置 MiniMax 编码计划，无需 API 密钥。
 
-Enable the bundled OAuth plugin and authenticate:
+启用捆绑的 OAuth 插件并进行身份验证：
 
 ```bash
-moltbot plugins enable minimax-portal-auth  # skip if already loaded.
-moltbot gateway restart  # restart if gateway is already running
-moltbot onboard --auth-choice minimax-portal
+openclaw-cn plugins enable minimax-portal-auth  # 如果已加载则跳过。
+openclaw-cn gateway restart  # 如果网关已在运行则重启
+openclaw-cn onboard --auth-choice minimax-portal
 ```
-You will be prompted to select an endpoint:
-- **Global** - International users (`api.minimax.io`)
-- **CN** - Users in China (`api.minimaxi.com`)
+系统将提示您选择端点：
+- **Global** - 国际用户 (`api.minimax.io`)
+- **CN** - 中国用户 (`api.minimaxi.com`)
 
-See [MiniMax OAuth plugin README](https://github.com/moltbot/moltbot/tree/main/extensions/minimax-portal-auth) for details.
+详情请参见 [MiniMax OAuth 插件 README](https://github.com/moltbot/moltbot/tree/main/extensions/minimax-portal-auth)。
 
-### MiniMax M2.1 (API key) 
+### MiniMax M2.1（API 密钥）
 
-**Best for:** hosted MiniMax with Anthropic-compatible API.
+**最适合：** 使用与 Anthropic 兼容 API 的托管 MiniMax。
 
-Configure via CLI:
-- Run `clawdbot configure`
-- Select **Model/auth**
-- Choose **MiniMax M2.1**
+通过 CLI 配置：
+- 运行 `clawdbot-cn configure`
+- 选择 **模型/认证**
+- 选择 **MiniMax M2.1**
 
 ```json5
 {
@@ -89,9 +84,9 @@ Configure via CLI:
 }
 ```
 
-### MiniMax M2.1 as fallback (Opus primary)
+### MiniMax M2.1 作为备选（Opus 为主）
 
-**Best for:** keep Opus 4.5 as primary, fail over to MiniMax M2.1.
+**最适合：** 保持 Opus 4.5 为主要模型，故障转移到 MiniMax M2.1。
 
 ```json5
 {
@@ -111,13 +106,12 @@ Configure via CLI:
 }
 ```
 
-### Optional: Local via LM Studio (manual)
+### 可选：通过 LM Studio 本地运行（手动）
 
-**Best for:** local inference with LM Studio.
-We have seen strong results with MiniMax M2.1 on powerful hardware (e.g. a
-desktop/server) using LM Studio's local server.
+**最适合：** 使用 LM Studio 进行本地推理。
+我们在强大的硬件上（例如桌面/服务器）使用 LM Studio 的本地服务器看到了 MiniMax M2.1 的强劲结果。
 
-Configure manually via `openclaw.json`:
+通过 `openclaw.json` 手动配置：
 
 ```json5
 {
@@ -151,51 +145,49 @@ Configure manually via `openclaw.json`:
 }
 ```
 
-## Configure via `clawdbot configure`
+## 通过 `clawdbot-cn configure` 配置
 
-Use the interactive config wizard to set MiniMax without editing JSON:
+使用交互式配置向导设置 MiniMax 而无需编辑 JSON：
 
-1) Run `clawdbot configure`.
-2) Select **Model/auth**.
-3) Choose **MiniMax M2.1**.
-4) Pick your default model when prompted.
+1) 运行 `clawdbot-cn configure`。
+2) 选择 **模型/认证**。
+3) 选择 **MiniMax M2.1**。
+4) 在提示时选择您的默认模型。
 
 
-## Configuration options
+## 配置选项
 
-- `models.providers.minimax.baseUrl`: prefer `https://api.minimax.io/anthropic` (Anthropic-compatible); `https://api.minimax.io/v1` is optional for OpenAI-compatible payloads.
-- `models.providers.minimax.api`: prefer `anthropic-messages`; `openai-completions` is optional for OpenAI-compatible payloads.
-- `models.providers.minimax.apiKey`: MiniMax API key (`MINIMAX_API_KEY`).
-- `models.providers.minimax.models`: define `id`, `name`, `reasoning`, `contextWindow`, `maxTokens`, `cost`.
-- `agents.defaults.models`: alias models you want in the allowlist.
-- `models.mode`: keep `merge` if you want to add MiniMax alongside built-ins.
+- `models.providers.minimax.baseUrl`：首选 `https://api.minimax.io/anthropic`（与 Anthropic 兼容）；`https://api.minimax.io/v1` 对 OpenAI 兼容的有效载荷是可选的。
+- `models.providers.minimax.api`：首选 `anthropic-messages`；`openai-completions` 对 OpenAI 兼容的有效载荷是可选的。
+- `models.providers.minimax.apiKey`：MiniMax API 密钥（`MINIMAX_API_KEY`）。
+- `models.providers.minimax.models`：定义 `id`、`name`、`reasoning`、`contextWindow`、`maxTokens`、`cost`。
+- `agents.defaults.models`：为允许列表中想要的模型设置别名。
+- `models.mode`：如果您想在内置模型旁边添加 MiniMax，请保持 `merge`。
 
-## Notes
+## 注意事项
 
-- Model refs are `minimax/<model>`.
-- Coding Plan usage API: `https://api.minimaxi.com/v1/api/openplatform/coding_plan/remains` (requires a coding plan key).
-- Update pricing values in `models.json` if you need exact cost tracking.
-- Referral link for MiniMax Coding Plan (10% off): https://platform.minimax.io/subscribe/coding-plan?code=DbXJTRClnb&source=link
-- See [/concepts/model-providers](/concepts/model-providers) for provider rules.
-- Use `openclaw-cn models list` and `openclaw-cn models set minimax/MiniMax-M2.1` to switch.
+- 模型引用为 `minimax/<model>`。
+- 编码计划使用 API：`https://api.minimaxi.com/v1/api/openplatform/coding_plan/remains`（需要编码计划密钥）。
+- 如果需要精确的成本跟踪，请更新 `models.json` 中的定价值。
+- MiniMax 编码计划推荐链接（享受 10% 折扣）：https://platform.minimax.io/subscribe/coding-plan?code=DbXJTRClnb&source=link
+- 请参见 [/concepts/model-providers](/concepts/model-providers) 了解提供商规则。
+- 使用 `openclaw-cn models list` 和 `openclaw-cn models set minimax/MiniMax-M2.1` 进行切换。
 
-## Troubleshooting
+## 故障排除
 
-### “Unknown model: minimax/MiniMax-M2.1”
+### "未知模型：minimax/MiniMax-M2.1"
 
-This usually means the **MiniMax provider isn’t configured** (no provider entry
-and no MiniMax auth profile/env key found). A fix for this detection is in
-**2026.1.12** (unreleased at the time of writing). Fix by:
-- Upgrading to **2026.1.12** (or run from source `main`), then restarting the gateway.
-- Running `clawdbot configure` and selecting **MiniMax M2.1**, or
-- Adding the `models.providers.minimax` block manually, or
-- Setting `MINIMAX_API_KEY` (or a MiniMax auth profile) so the provider can be injected.
+这通常意味着**MiniMax 提供商未配置**（未找到提供商条目和 MiniMax 认证配置文件/环境密钥）。此检测的修复程序在**2026.1.12**中（撰写时未发布）。修复方法：
+- 升级到 **2026.1.12**（或从源码 `main` 运行），然后重启网关。
+- 运行 `clawdbot-cn configure` 并选择 **MiniMax M2.1**，或
+- 手动添加 `models.providers.minimax` 块，或
+- 设置 `MINIMAX_API_KEY`（或 MiniMax 认证配置文件）以便可以注入提供商。
 
-Make sure the model id is **case‑sensitive**:
+确保模型 ID 是**区分大小写**的：
 - `minimax/MiniMax-M2.1`
 - `minimax/MiniMax-M2.1-lightning`
 
-Then recheck with:
+然后重新检查：
 ```bash
 openclaw-cn models list
 ```

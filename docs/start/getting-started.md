@@ -1,130 +1,130 @@
 ---
-summary: "Get OpenClaw installed and run your first chat in minutes."
+summary: "安装 OpenClaw 并在几分钟内运行您的第一次聊天。"
 read_when:
-  - First time setup from zero
-  - You want the fastest path to a working chat
-title: "Getting Started"
+  - 从零开始首次设置
+  - 您想要最快的工作聊天路径
+title: "入门指南"
 ---
 
-# Getting Started
+# 入门指南
 
-Goal: go from zero to a first working chat with minimal setup.
+目标：从零开始，用最少的设置运行第一次工作聊天。
 
 <Info>
-Fastest chat: open the Control UI (no channel setup needed). Run `openclaw dashboard`
-and chat in the browser, or open `http://127.0.0.1:18789/` on the
-<Tooltip headline="Gateway host" tip="The machine running the OpenClaw gateway service.">gateway host</Tooltip>.
-Docs: [Dashboard](/web/dashboard) and [Control UI](/web/control-ui).
+最快聊天：打开控制 UI（无需频道设置）。运行 `openclaw-cn dashboard`
+并在浏览器中聊天，或在
+<Tooltip headline="网关主机" tip="运行 OpenClaw 网关服务的机器。">网关主机</Tooltip>上打开 `http://127.0.0.1:18789/`。
+文档：[仪表板](/web/dashboard) 和 [控制 UI](/web/control-ui)。
 </Info>
 
-## Prereqs
+## 前提条件
 
-- Node 22 or newer
+- Node 22 或更新版本
 
 <Tip>
-Check your Node version with `node --version` if you are unsure.
+如果不确定，请使用 `node --version` 检查您的 Node 版本。
 </Tip>
 
-## Quick setup (CLI)
+## 快速设置（CLI）
 
 <Steps>
-  <Step title="Install OpenClaw (recommended)">
+  <Step title="安装 OpenClaw（推荐）">
     <Tabs>
       <Tab title="macOS/Linux">
         ```bash
-        curl -fsSL https://openclaw.ai/install.sh | bash
+        curl -fsSL https://clawd.org.cn/install.sh | bash
         ```
       </Tab>
       <Tab title="Windows (PowerShell)">
         ```powershell
-        iwr -useb https://openclaw.ai/install.ps1 | iex
+        iwr -useb https://clawd.org.cn/install.ps1 | iex
         ```
       </Tab>
     </Tabs>
 
     <Note>
-    Other install methods and requirements: [Install](/install).
+    其他安装方法和要求：[安装](/install)。
     </Note>
 
   </Step>
-  <Step title="Run the onboarding wizard">
+  <Step title="运行引导向导">
     ```bash
-    openclaw onboard --install-daemon
+    openclaw-cn onboard --install-daemon
     ```
 
-    The wizard configures auth, gateway settings, and optional channels.
-    See [Onboarding Wizard](/start/wizard) for details.
+    向导配置认证、网关设置和可选频道。
+    详情请参见 [引导向导](/start/wizard)。
 
   </Step>
-  <Step title="Check the Gateway">
-    If you installed the service, it should already be running:
+  <Step title="检查网关">
+    如果您安装了服务，它应该已经在运行：
 
     ```bash
-    openclaw gateway status
+    openclaw-cn gateway status
     ```
 
   </Step>
-  <Step title="Open the Control UI">
+  <Step title="打开控制 UI">
     ```bash
-    openclaw dashboard
+    openclaw-cn dashboard
     ```
   </Step>
 </Steps>
 
 <Check>
-If the Control UI loads, your Gateway is ready for use.
+如果控制 UI 加载成功，您的网关已准备就绪。
 </Check>
 
-## Optional checks and extras
+## 可选检查和附加功能
 
 <AccordionGroup>
-  <Accordion title="Run the Gateway in the foreground">
-    Useful for quick tests or troubleshooting.
+  <Accordion title="在前台运行网关">
+    适用于快速测试或故障排除。
 
     ```bash
-    openclaw gateway --port 18789
+    openclaw-cn gateway --port 18789
     ```
 
   </Accordion>
-  <Accordion title="Send a test message">
-    Requires a configured channel.
+  <Accordion title="发送测试消息">
+    需要配置的频道。
 
     ```bash
-    openclaw message send --target +15555550123 --message "Hello from OpenClaw"
+    openclaw-cn message send --target +15555550123 --message "来自 OpenClaw 的问候"
     ```
 
   </Accordion>
 </AccordionGroup>
 
-## Useful environment variables
+## 有用的环境变量
 
-If you run OpenClaw as a service account or want custom config/state locations:
+如果您将 OpenClaw 作为服务账户运行或想要自定义配置/状态位置：
 
-- `OPENCLAW_HOME` sets the home directory used for internal path resolution.
-- `OPENCLAW_STATE_DIR` overrides the state directory.
-- `OPENCLAW_CONFIG_PATH` overrides the config file path.
+- `OPENCLAW_HOME` 设置用于内部路径解析的主目录。
+- `OPENCLAW_STATE_DIR` 覆盖状态目录。
+- `OPENCLAW_CONFIG_PATH` 覆盖配置文件路径。
 
-Full environment variable reference: [Environment vars](/help/environment).
+完整的环境变量参考：[环境变量](/help/environment)。
 
-## Go deeper
+## 深入了解
 
 <Columns>
-  <Card title="Onboarding Wizard (details)" href="/start/wizard">
-    Full CLI wizard reference and advanced options.
+  <Card title="引导向导（详细信息）" href="/start/wizard">
+    完整的 CLI 向导参考和高级选项。
   </Card>
-  <Card title="macOS app onboarding" href="/start/onboarding">
-    First run flow for the macOS app.
+  <Card title="macOS 应用引导" href="/start/onboarding">
+    macOS 应用的首次运行流程。
   </Card>
 </Columns>
 
-## What you will have
+## 您将拥有
 
-- A running Gateway
-- Auth configured
-- Control UI access or a connected channel
+- 正在运行的网关
+- 已配置的认证
+- 控制 UI 访问权限或已连接的频道
 
-## Next steps
+## 下一步
 
-- DM safety and approvals: [Pairing](/channels/pairing)
-- Connect more channels: [Channels](/channels)
-- Advanced workflows and from source: [Setup](/start/setup)
+- 私信安全和审批：[配对](/channels/pairing)
+- 连接更多频道：[频道](/channels)
+- 高级工作流和源码安装：[设置](/start/setup)
