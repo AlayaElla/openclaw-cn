@@ -105,7 +105,7 @@ jobs:
       - name: Setup upstream remote
         run: |
           git remote add upstream "https://github.com/$UPSTREAM_REPO.git" 2>/dev/null || true
-          git fetch upstream --tags
+          git fetch upstream --tags --force
 
       - name: Extract and categorize commits
         run: |
