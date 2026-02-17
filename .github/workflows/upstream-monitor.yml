@@ -126,14 +126,16 @@ jobs:
       - name: AI analysis and refinement
         id: ai
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
-          AI_PROVIDER: ${{ vars.AI_PROVIDER || 'deepseek' }}
+          AI_PROVIDER: ${{ secrets.AI_PROVIDER || vars.AI_PROVIDER || 'deepseek' }}
           AI_BASE_URL: ${{ vars.AI_BASE_URL || '' }}
           AI_MODEL: ${{ vars.AI_MODEL || '' }}
         run: |
           if [ -z "$AI_API_KEY" ]; then
             echo "ℹ️ AI_API_KEY 未配置，使用脚本规则分类"
             echo "ai_used=false" >> "$GITHUB_OUTPUT"
+            echo "ai_status=not_configured" >> "$GITHUB_OUTPUT"
             echo "ai_overrides=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -243,6 +245,7 @@ jobs:
             echo "::warning::AI API 调用失败，使用脚本规则分类"
             cat /tmp/ai-response.json >&2 || true
             echo "ai_used=false" >> "$GITHUB_OUTPUT"
+            echo "ai_status=api_failed" >> "$GITHUB_OUTPUT"
             echo "ai_overrides=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -279,6 +282,7 @@ jobs:
             echo "::warning::AI 输出解析失败，使用脚本规则分类"
             head -30 /tmp/ai-raw-response.txt >&2
             echo "ai_used=false" >> "$GITHUB_OUTPUT"
+            echo "ai_status=parse_failed" >> "$GITHUB_OUTPUT"
             echo "ai_overrides=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
@@ -305,6 +309,7 @@ jobs:
               echo "::warning::jq 合并失败，使用脚本规则分类"
               jq '.' /tmp/ai-overrides.json | head -5 >&2 || true
               echo "ai_used=false" >> "$GITHUB_OUTPUT"
+              echo "ai_status=merge_failed" >> "$GITHUB_OUTPUT"
               echo "ai_overrides=0" >> "$GITHUB_OUTPUT"
               exit 0
             }
@@ -323,6 +328,7 @@ jobs:
           OVERRIDE_COUNT=$((OVERRIDE_COUNT / 2))
 
           echo "ai_used=true" >> "$GITHUB_OUTPUT"
+          echo "ai_status=success" >> "$GITHUB_OUTPUT"
           echo "ai_overrides=$OVERRIDE_COUNT" >> "$GITHUB_OUTPUT"
           echo "✅ AI 分析完成，修正了 $OVERRIDE_COUNT 项分类"
 
@@ -354,6 +360,7 @@ jobs:
           LATEST="${{ needs.check-upstream.outputs.latest_tag }}"
           TAGS="${{ needs.check-upstream.outputs.release_tags }}"
           AI_USED="${{ steps.ai.outputs.ai_used }}"
+          AI_STATUS="${{ steps.ai.outputs.ai_status }}"
           AI_OVERRIDES="${{ steps.ai.outputs.ai_overrides }}"
 
           # 去重检查
@@ -381,8 +388,16 @@ jobs:
             echo ""
             if [ "$AI_USED" = "true" ]; then
               echo "> 🧠 **AI 已审查分类**（修正了 **$AI_OVERRIDES** 项）"
-            else
+            elif [ "$AI_STATUS" = "not_configured" ]; then
               echo "> ⚙️ 使用规则引擎分类（未配置 AI_API_KEY）"
+            elif [ "$AI_STATUS" = "api_failed" ]; then
+              echo "> ⚠️ AI API 调用失败，已回退到规则引擎分类"
+            elif [ "$AI_STATUS" = "parse_failed" ]; then
+              echo "> ⚠️ AI 返回结果解析失败，已回退到规则引擎分类"
+            elif [ "$AI_STATUS" = "merge_failed" ]; then
+              echo "> ⚠️ AI 决策合并失败，已回退到规则引擎分类"
+            else
+              echo "> ⚙️ 使用规则引擎分类"
             fi
             echo ""
             echo "### 📊 分类摘要"
