@@ -31,13 +31,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/process/exec.test.ts",
       "src/telegram/bot.create-telegram-bot.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试优化，不影响功能"
   },
   {
     "sha": "25dc4293bf939adf25eaf7ddb3a80208def575e0",
@@ -102,12 +103,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "BUILD",
     "conflict_risk": "MEDIUM",
     "files": [
       "pnpm-lock.yaml"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Docker配置同步，非核心功能"
   },
   {
     "sha": "ae6fe67550ac86ecf816caa6b61d1c8b18f4c600",
@@ -159,12 +161,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram测试，非核心修复"
   },
   {
     "sha": "d1fca442b4ee3342c820a231c3ce73546534951a",
@@ -179,7 +182,8 @@
       "src/agents/sandbox/hash.ts",
       "src/agents/sandbox/shared.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "重构：沙箱SHA256工具函数"
   },
   {
     "sha": "3c467baa2d2a8469aef9a89b6ab98ee4d7e47f64",
@@ -206,7 +210,8 @@
       "src/agents/skills-install.ts",
       "src/agents/skills-status.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "重构：技能安装策略助手"
   },
   {
     "sha": "41ded303b4f6dae5afa854531ff837c3276ad60b",
@@ -221,7 +226,8 @@
       "src/agents/sandbox/config-hash.test.ts",
       "src/agents/sandbox/config-hash.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "沙箱配置哈希保持数组顺序，核心引擎修复"
   },
   {
     "sha": "cbf58d2e1c835d9a5b077fef52e88a10a23d1449",
@@ -236,21 +242,23 @@
       "src/agents/context.test.ts",
       "src/agents/context.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存上下文窗口缓存冲突修复，核心引擎"
   },
   {
     "sha": "559c8d9930eebb5356506ff1a8cd3dbaec92be77",
     "message": "fix: replace deprecated SHA-1 in sandbox config hash",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "MERGE",
+    "priority": "P0",
+    "category": "SECURITY",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md",
       "src/agents/sandbox/config-hash.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "替换沙箱配置哈希中的废弃SHA-1，安全修复"
   },
   {
     "sha": "aef1d55300083c951c27ac3ee629e99f3b450906",
@@ -272,7 +280,8 @@
       "src/cron/isolated-agent/skills-snapshot.ts",
       "src/cron/isolated-agent/subagent-followup.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron技能过滤器快照标准化，核心引擎"
   },
   {
     "sha": "6754a926ee227f72f894044a883b5fdaad047662",
@@ -280,7 +289,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/commands/doctor-state-migrations.e2e.test.ts",
@@ -289,7 +298,8 @@
       "src/pairing/pairing-store.test.ts",
       "src/pairing/pairing-store.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram配对迁移支持，非核心功能"
   },
   {
     "sha": "18c6f40d32b51e9675503f6111300bff2aab55e2",
@@ -308,29 +318,31 @@
     "sha": "c7bc7249c3beacf0094aa5d3535cd21118ec4d1b",
     "message": "test (security/line): cover missing webhook auth startup paths",
     "pr": "",
-    "action": "MERGE",
-    "priority": "P0",
-    "category": "SECURITY",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "extensions/line/src/channel.startup.test.ts",
       "src/line/monitor.fail-closed.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Line渠道安全测试，不使用"
   },
   {
     "sha": "beb77229c0518434de661e2d0305be099b74f672",
     "message": "fix (security/line): fail closed when webhook auth is missing",
     "pr": "",
-    "action": "MERGE",
-    "priority": "P0",
-    "category": "SECURITY",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "extensions/line/src/channel.ts",
       "src/line/monitor.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Line渠道安全修复，不使用"
   },
   {
     "sha": "d19b746928e99507d6192340210cb0360e308abf",
@@ -350,7 +362,8 @@
       "src/cron/isolated-agent/run.skill-filter.test.ts",
       "src/pairing/pairing-store.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "技能跨平台安装回退，增强功能"
   },
   {
     "sha": "9df21da1290779bd846c98b3edc4aed3de7c320a",
@@ -358,12 +371,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "3087657679dab983be06244b66be87decd59ad8d",
@@ -371,36 +385,38 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/agent-runner.misc.runreplyagent.test.ts",
       "src/auto-reply/reply/agent-runner.runreplyagent.test.ts",
       "src/auto-reply/reply/memory-flush.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存压缩测试，非核心"
   },
   {
     "sha": "ffbcb37342c02e71286191cc1b68416cd345063f",
     "message": "fix (memory/compaction): inject runtime date-time into memory flush prompt",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "MERGE",
+    "priority": "P1",
+    "category": "CRITICAL-BUG",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/agent-runner-memory.ts",
       "src/auto-reply/reply/memory-flush.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存刷新提示注入运行时日期，核心引擎"
   },
   {
     "sha": "a61c2dc4bd69edca3534c8ec3fe2fedd68473b28",
     "message": "Discord: add component v2 UI tool support (#17419)",
     "pr": "#17419",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md",
@@ -419,7 +435,8 @@
       "src/discord/send.ts",
       "src/infra/outbound/message-action-runner.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Discord渠道功能，不使用"
   },
   {
     "sha": "b4a9eacd76251a666900ba9e504573c775f871ea",
@@ -446,7 +463,8 @@
       "src/telegram/send.test.ts",
       "src/telegram/send.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram无操作编辑消息处理，使用中渠道"
   },
   {
     "sha": "7089885ac49eea95de6a0bd5b96496a70302c9fb",
@@ -459,7 +477,8 @@
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Unicode FTS分词修复，CJK支持"
   },
   {
     "sha": "501e89367602b85f536ad740544aebd8147f8ac1",
@@ -473,7 +492,8 @@
       "src/memory/hybrid.test.ts",
       "src/memory/hybrid.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存搜索Unicode分词支持，CJK修复"
   },
   {
     "sha": "82631d225cf61b901d0deaf3580b4868086d03ea",
@@ -481,12 +501,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "799049f586dc59792f56ae688a44237929652aad",
@@ -494,13 +515,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/system-prompt.e2e.test.ts",
       "src/agents/system-prompt.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "沙箱提示路径澄清，非核心"
   },
   {
     "sha": "ab1dc89a2d9a494e3f9792c314fe5bfde0c33cbd",
@@ -522,12 +544,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "eed02a2b574b323a57949bc28b6332328336a4f5",
@@ -541,7 +564,8 @@
       "src/gateway/server.auth.e2e.test.ts",
       "src/gateway/server/ws-connection/message-handler.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关控制UI范围保持，核心安全"
   },
   {
     "sha": "a203430aa34d2ad2a76ad1d7b356c06346727fd1",
@@ -549,12 +573,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "6cf7c02d4ac6d2f1e78d9e2413b14cb909c2cb1f",
@@ -562,13 +587,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "CLI",
     "conflict_risk": "LOW",
     "files": [
       "src/cli/pairing-cli.test.ts",
       "src/cli/pairing-cli.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CLI配对命令账户选择器，增强功能"
   },
   {
     "sha": "6957354d4819de65d3cb74eb1fd888b96a0d38b6",
@@ -576,7 +602,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/bot-handlers.ts",
@@ -586,7 +612,8 @@
       "src/web/auto-reply/monitor/process-message.ts",
       "src/web/inbound/access-control.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram/WhatsApp账户范围配对白名单，非核心"
   },
   {
     "sha": "ee10feb80e7c895609fd00f15036b3584a1b2b9a",
@@ -600,7 +627,8 @@
       "src/pairing/pairing-store.test.ts",
       "src/pairing/pairing-store.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "配对存储按账户范围划分，核心安全"
   },
   {
     "sha": "61c99352640ff9746fcd613262201377ea5b2ffb",
@@ -608,12 +636,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/cron/isolated-agent/run.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron缩进修复，非核心"
   },
   {
     "sha": "e5dbfde7e1230dfc58069c57c7ec1826e24cc4c6",
@@ -640,7 +669,8 @@
       "src/cron/isolated-agent/run.skill-filter.test.ts",
       "src/cron/isolated-agent/run.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron传递代理级技能过滤器，核心引擎"
   },
   {
     "sha": "e1e46dc11bfda6bea2dca41fe80a3b1dbce059fd",
@@ -687,12 +717,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "85430c8495cf60770d9ae0432a050efcfe83f600",
@@ -700,13 +731,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/memory/qmd-manager.test.ts",
       "src/memory/qmd-manager.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存QMD集合路径重新绑定，非核心"
   },
   {
     "sha": "8e162d9319ea63196b2bba11edbd28a7466e0c26",
@@ -714,12 +746,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "DOCS",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新日志，纯文档"
   },
   {
     "sha": "bed8e7abe6e43cd7cf9bd29310fed257cd5ab442",
@@ -727,13 +760,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/inbound-meta.test.ts",
       "src/auto-reply/reply/inbound-meta.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "自动回复中暴露消息ID，非核心"
   },
   {
     "sha": "82333add95862359b1d1c361aace6e1efd02d577",
@@ -779,7 +813,8 @@
       "src/agents/tools/sessions-send-tool.ts",
       "src/telegram/bot.create-telegram-bot.test-harness.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话访问和解析助手拆分"
   },
   {
     "sha": "2f621876f1b459a4fe6a9cd8dea736d7e56220c5",
@@ -827,13 +862,14 @@
     "pr": "#17673",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "CHANGELOG.md",
       "src/browser/client-fetch.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "停止LLM重试循环当浏览器服务不可用"
   },
   {
     "sha": "17a148c8a847d4270bf22201c8cf0f79f4b8ce66",
@@ -841,13 +877,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/system-prompt.e2e.test.ts",
       "src/agents/system-prompt.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "始终包含长等待轮询指导，非核心"
   },
   {
     "sha": "abd26b6e54d3623889e7e7f997aced7e8665653d",
@@ -861,7 +898,8 @@
       "ui/src/ui/controllers/control-ui-bootstrap.test.ts",
       "ui/src/ui/controllers/control-ui-bootstrap.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "UI：重用控制UI启动路径常量"
   },
   {
     "sha": "8985f23de740a18dd2f101cd75b6d6f3ba67d552",
@@ -891,7 +929,8 @@
       "src/gateway/control-ui-csp.ts",
       "src/gateway/control-ui.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关：共享控制UI启动合约和CSP"
   },
   {
     "sha": "6e7c1c16e75f386d753688c10619e333f54121f6",
@@ -935,7 +974,8 @@
       "src/infra/install-safe-path.test.ts",
       "src/infra/path-safety.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "技能安装安全测试，核心安全"
   },
   {
     "sha": "2363e1b0853a028e47f90dcc1066e3e9809d65f1",
@@ -956,7 +996,8 @@
       "src/infra/path-safety.ts",
       "src/infra/state-migrations.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "限制技能下载目标路径，核心安全"
   },
   {
     "sha": "c6c53437f7da033b94a01d492e904974e7bda74c",
@@ -989,7 +1030,8 @@
       "src/telegram/monitor.test.ts",
       "src/telegram/monitor.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "范围会话工具和webhook密钥回退，核心安全"
   },
   {
     "sha": "fbe6d7c701b6f98d272e9d18cb14d260e8cff564",
@@ -997,38 +1039,41 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "BUILD",
     "conflict_risk": "LOW",
     "files": [
       "scripts/e2e/Dockerfile"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CI：Docker构建包含a2ui源码"
   },
   {
     "sha": "2a53eff8569610f48a96d1f9804e1ac8bd47d67e",
     "message": "perf: speed up slack slash handler tests",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/slack/monitor/slash.test-harness.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Slack测试性能优化，不使用"
   },
   {
     "sha": "cd37c52624bfab1879f1b02e53e5592a26801f2d",
     "message": "perf: speed up slack slash tests",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/slack/monitor/slash.test-harness.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Slack测试性能优化，不使用"
   },
   {
     "sha": "17e5a5015c47755f4cf4103e0d58cebd13d478c4",
@@ -1036,13 +1081,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "PERF",
     "conflict_risk": "LOW",
     "files": [
       "src/cron/service.read-ops-nonblocking.test.ts",
       "src/cron/service/timer.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "避免异步cron定时器回调，性能优化"
   },
   {
     "sha": "8515ae6eea03bfd815b29c25eda8a7295073ac08",
@@ -1050,13 +1096,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/bot.create-telegram-bot.test-harness.ts",
       "src/telegram/bot.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram测试性能优化"
   },
   {
     "sha": "d1de66b6cf9898f31b56b8827a3002753c5b24fd",
@@ -1064,12 +1111,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/gateway-lock.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关锁测试性能优化"
   },
   {
     "sha": "7eeba3de85078d23bb012e7d63eaf0ba9918e38f",
@@ -1077,13 +1125,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/bot.create-telegram-bot.test-harness.ts",
       "src/telegram/bot.create-telegram-bot.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram测试套件性能优化"
   },
   {
     "sha": "38c91c5a13976cfa6ef651edf6d002fdc0bf8834",
@@ -1149,14 +1198,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/sandbox/tool-policy.e2e.test.ts",
       "src/agents/sandbox/tool-policy.ts",
       "src/agents/tool-policy.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "保持沙箱全部允许语义，非核心"
   },
   {
     "sha": "014d45f7eeb82a32ea88e81667dde171723a36dc",
@@ -1193,13 +1243,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/cli/gateway-cli/discover.test.ts",
       "src/cli/gateway-cli/run-loop.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关发现测试性能优化"
   },
   {
     "sha": "aa1e4962da4f74e643e4fd22d068920111822464",
@@ -1207,13 +1258,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/commands/doctor.falls-back-legacy-sandbox-image-missing.e2e.test.ts",
       "src/commands/doctor.runs-legacy-state-migrations-yes-mode-without.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "doctor迁移测试性能优化"
   },
   {
     "sha": "ea07d3fdd814be139371eae275a459fa10d97640",
@@ -1221,7 +1273,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/auth-profiles.auth-profile-cooldowns.e2e.test.ts",
@@ -1233,7 +1285,8 @@
       "src/commands/health-format.e2e.test.ts",
       "src/commands/health.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "认证/PTY/健康测试性能优化"
   },
   {
     "sha": "f142048293c242150dc773c411f0e7e29a9df037",
@@ -1241,7 +1294,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/tool-policy.conformance.e2e.test.ts",
@@ -1249,7 +1302,8 @@
       "src/commands/doctor-memory-search.test.ts",
       "src/commands/doctor-workspace.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "工具策略+doctor测试性能优化"
   },
   {
     "sha": "5fe47e7be677eac9dfb3a5b2baf2fc0b38e2873c",
@@ -1257,7 +1311,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/pi-embedded-helpers.normalizetextforcomparison.e2e.test.ts",
@@ -1266,7 +1320,8 @@
       "src/terminal/note.test.ts",
       "src/terminal/table.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "端口+终端测试性能优化"
   },
   {
     "sha": "3f44ea244f8074fef72c14f76ddeb9f590f977bb",
@@ -1274,7 +1329,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/gateway/server-methods/health.status-scope.test.ts",
@@ -1282,7 +1337,8 @@
       "src/signal/monitor/event-handler.mention-gating.test.ts",
       "src/signal/monitor/mentions.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "健康+信号提及测试性能优化"
   },
   {
     "sha": "6b2f40652f17114adf9406f3f1e835489d604838",
@@ -1290,7 +1346,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/daemon/arg-split.test.ts",
@@ -1300,7 +1356,8 @@
       "src/daemon/systemd-unit.test.ts",
       "src/daemon/systemd.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "守护进程测试性能优化"
   },
   {
     "sha": "00e79ac897971b6b4a0e2ba227023b9b94bb536b",
@@ -1308,7 +1365,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/pi-embedded-helpers.buildbootstrapcontextfiles.e2e.test.ts",
@@ -1337,7 +1394,8 @@
       "src/agents/pi-embedded-helpers.sanitizeuserfacingtext.e2e.test.ts",
       "src/agents/pi-embedded-helpers.stripthoughtsignatures.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "PI嵌入式测试性能优化"
   },
   {
     "sha": "efe530acdd6a953d06f028b09d157be1125176c3",
@@ -1345,13 +1403,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/routing/session-key.test.ts",
       "src/sessions/session-key-utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话密钥工具测试性能优化"
   },
   {
     "sha": "d69496c4494c82a7285413b7b9ecf7deb5fd4459",
@@ -1359,7 +1418,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/config-misc.test.ts",
@@ -1368,7 +1427,8 @@
       "src/config/config.model-compat-schema.test.ts",
       "src/config/config.preservation-on-validation-failure.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "配置测试性能优化"
   },
   {
     "sha": "9386075b7b6dc5a3d2e921daa787963c6c71af69",
@@ -1382,7 +1442,8 @@
       "src/node-host/invoke.sanitize-env.test.ts",
       "src/node-host/runner.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "节点主机运行器安全测试，核心安全"
   },
   {
     "sha": "e64dd7b56ab5acb168e33c95c8f324c482accc10",
@@ -1390,13 +1451,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/markdown/ir.list-spacing.test.ts",
       "src/markdown/ir.nested-lists.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Markdown列表测试性能优化"
   },
   {
     "sha": "0e4eada580fa15142db880174ed7b45198adad0b",
@@ -1404,13 +1466,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/token.test.ts",
       "src/telegram/update-offset-store.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram更新偏移存储测试性能优化"
   },
   {
     "sha": "65b5dbd6c1eee6fcbad4c676c5a2d81879f6431f",
@@ -1418,13 +1481,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/send.test.ts",
       "src/telegram/sent-message-cache.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram已发送消息缓存测试性能优化"
   },
   {
     "sha": "e770728cb5c1d0a15ebd008c4b960ec0d12a8429",
@@ -1432,13 +1496,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/download.test.ts",
       "src/telegram/fetch.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram下载测试性能优化"
   },
   {
     "sha": "cb80901cf9d94d915b549178cf9c40eabac23ba5",
@@ -1446,13 +1511,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/heartbeat-runner.cron-system-event-filter.test.ts",
       "src/infra/system-events.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron系统事件过滤器测试性能优化"
   },
   {
     "sha": "3e0076c9ced442b35739d1059e7e9971a7608643",
@@ -1460,13 +1526,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/index.test.ts",
       "src/utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "索引入口测试性能优化"
   },
   {
     "sha": "02124094bfb529af1667ecf176d742c9d8d3c33e",
@@ -1474,13 +1541,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/acp/client.test.ts",
       "src/acp/event-mapper.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "ACP事件映射器测试性能优化"
   },
   {
     "sha": "37f030a671ea7ee72b40582fc04dc67cbc3a70c8",
@@ -1488,13 +1556,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/logger.test.ts",
       "src/logging/console-prefix.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "控制台前缀测试性能优化"
   },
   {
     "sha": "be3c431011b3376908f865e3bfb3a327ed7692e2",
@@ -1502,14 +1571,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/config-misc.test.ts",
       "src/config/config.gateway-remote-transport.test.ts",
       "src/config/config.gateway-tools-config.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关配置模式测试性能优化"
   },
   {
     "sha": "b97c5d6158331aa65b201c9f1e21378e87dee2a2",
@@ -1517,13 +1587,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/channels/channel-config.test.ts",
       "src/channels/sender-identity.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "发送者身份检查测试性能优化"
   },
   {
     "sha": "2b4ebcb5701ed1f3b1d09c48a445e2f82f8a6fae",
@@ -1545,7 +1616,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/canvas-host/a2ui/.bundle.hash",
@@ -1553,7 +1624,8 @@
       "src/globals.test.ts",
       "src/logger.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "全局单元测试性能优化"
   },
   {
     "sha": "056070c2bfb09fd1c865b26e92495f740c881c95",
@@ -1561,13 +1633,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/config-misc.test.ts",
       "src/config/config.cron-webhook-schema.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron webhook模式测试性能优化"
   },
   {
     "sha": "04004c56636bb979a826d15f81a4841223e6b985",
@@ -1575,14 +1648,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/models-config.providers.minimax.test.ts",
       "src/agents/models-config.providers.nvidia.test.ts",
       "src/agents/models-config.providers.vllm.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "模型配置提供者测试性能优化"
   },
   {
     "sha": "e1350ff9765c5aa9c1ed1a15a6ee244357c6423a",
@@ -1604,13 +1678,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/web/login.test.ts",
       "src/web/qr-image.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "QR图片测试性能优化"
   },
   {
     "sha": "58ab60c0fc18c6a62fdfbb0113830ec4e79748b7",
@@ -1624,7 +1699,8 @@
       "src/infra/net/ssrf.test.ts",
       "src/infra/tls/fingerprint.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "TLS指纹规范化安全测试，SSRF相关"
   },
   {
     "sha": "7c27c2d659dc9de547e2145a9d93291a87ff282f",
@@ -1639,7 +1715,8 @@
       "src/cli/daemon-cli/status.print.ts",
       "src/cli/node-cli/daemon.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "守护进程CLI状态文本样式共享"
   },
   {
     "sha": "c1655982d4f98c09c497b196999ee336328fa6f3",
@@ -1656,7 +1733,8 @@
       "test/git-hooks-pre-commit.test.ts",
       "vitest.config.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "集中pre-commit文件过滤"
   },
   {
     "sha": "91c49dd0ea6787b07224de1d0468cff81c127632",
@@ -1669,7 +1747,8 @@
     "files": [
       "src/commands/status.update.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "状态注册表摘要格式化共享"
   },
   {
     "sha": "8eecf97cc5a60f795b1eb6fd705c5484e1353913",
@@ -1682,7 +1761,8 @@
     "files": [
       "src/cli/webhooks-cli.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CLI共享Gmail webhook选项解析"
   },
   {
     "sha": "46e714058cb0fd466f4348462fa268b940286d18",
@@ -1695,7 +1775,8 @@
     "files": [
       "src/agents/tools/subagents-tool.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "子代理列表行构建器去重"
   },
   {
     "sha": "1547bb6a073190dda709f0540af7c6d069bcc8d2",
@@ -1708,7 +1789,8 @@
     "files": [
       "src/auto-reply/reply/commands-session.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "自动回复共享中止持久化"
   },
   {
     "sha": "0c8bb361ca1874ddc93b2e5cecae588f4ed6a93e",
@@ -1721,7 +1803,8 @@
     "files": [
       "src/agents/tools/gateway-tool.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关工具共享写入元数据解析"
   },
   {
     "sha": "ddcc7a1a5d27161bd547b58a03dc484609d17000",
@@ -1751,7 +1834,8 @@
       "src/logging/console.ts",
       "src/logging/timestamps.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "日志共享本地ISO时间戳格式"
   },
   {
     "sha": "9805ce0097abe58160f0c8d30d2cc8e818d8d777",
@@ -1764,7 +1848,8 @@
     "files": [
       "src/memory/manager-embedding-ops.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存重用缓存嵌入收集器"
   },
   {
     "sha": "cf69907015b659e5025efb735ee31bd05c4ee3d5",
@@ -1780,7 +1865,8 @@
       "src/logging/redact.test.ts",
       "src/logging/redact.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram机器人令牌错误脱敏，安全修复"
   },
   {
     "sha": "09566b1693f0c04fed9f8476bc42d05574452f55",
@@ -1836,7 +1922,8 @@
       "src/telegram/bot-native-commands.ts",
       "src/telegram/bot/helpers.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram群组allowFrom解析共享"
   },
   {
     "sha": "b88f377623a0858dcc905800d3593246b8335523",
@@ -1844,12 +1931,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/test-helpers/fast-tool-stubs.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "快速工具存根类型可移植性修复"
   },
   {
     "sha": "ba84b12535b7d272cb4793109afc56dd332b32a0",
@@ -1865,7 +1953,8 @@
       "test/git-hooks-pre-commit.test.ts",
       "vitest.config.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "加固pre-commit钩子防止选项注入，安全"
   },
   {
     "sha": "dc9808a6745449edd2c8d40e91812b9955b6bbd0",
@@ -1878,7 +1967,8 @@
     "files": [
       "src/gateway/session-utils.fs.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关去重记录尾预览"
   },
   {
     "sha": "60ad2c2e96ac0cfe206c1ea1e7c4627035857de5",
@@ -1891,7 +1981,8 @@
     "files": [
       "src/infra/device-pairing.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "设备配对共享令牌更新上下文"
   },
   {
     "sha": "a7cbce1b3de2db87300c5c11f4be2ab3a2d29623",
@@ -1907,7 +1998,8 @@
       "src/config/zod-schema.agent-runtime.ts",
       "src/security/audit-extra.sync.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "加固沙箱绑定验证，安全修复"
   },
   {
     "sha": "a74251d415f3f25f8013d45718ff8b516a783d02",
@@ -1922,7 +2014,8 @@
       "src/agents/test-helpers/fast-core-tools.ts",
       "src/agents/test-helpers/fast-tool-stubs.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "代理去重快速工具存根"
   },
   {
     "sha": "cbc3de6c975da0cbf000a8a85a0ecb2271d6b371",
@@ -1948,7 +2041,8 @@
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "控制UI XSS修复文档，安全相关"
   },
   {
     "sha": "3b4096e02e7e335f99f5986ec1bd566e90b14a7e",
@@ -1956,7 +2050,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "HIGH",
     "files": [
       "ui/src/ui/app-lifecycle.ts",
@@ -1965,7 +2059,8 @@
       "ui/src/ui/controllers/control-ui-bootstrap.test.ts",
       "ui/src/ui/controllers/control-ui-bootstrap.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "UI通过JSON端点加载控制UI启动配置"
   },
   {
     "sha": "adc818db4a4b3b8d663e7674ef20436947514e1b",
@@ -1979,7 +2074,8 @@
       "src/gateway/control-ui.ts",
       "src/gateway/gateway-misc.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关提供控制UI启动配置并锁定CSP，核心引擎"
   },
   {
     "sha": "568fd337beac6ff209bb5d16669ec2ed4e506151",
@@ -1992,7 +2088,8 @@
     "files": [
       "src/agents/tools/web-fetch.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Web抓取去重firecrawl回退"
   },
   {
     "sha": "d9ca051a1d4f95ab832bf17cbc640891fba6f0aa",
@@ -2008,7 +2105,8 @@
       "src/auto-reply/reply/config-commands.ts",
       "src/auto-reply/reply/debug-commands.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "自动回复共享斜杠解析"
   },
   {
     "sha": "1b6704ef53257f892c9220f5115d303d5a7185fd",
@@ -2045,7 +2143,8 @@
       "src/security/audit.test.ts",
       "src/security/audit.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "加固沙箱Docker配置验证，安全修复"
   },
   {
     "sha": "d4bdcda32403cb8d1f100ae9e27a82f0ffaa04ca",
@@ -2061,7 +2160,8 @@
       "src/cli/nodes-cli/register.screen.ts",
       "src/cli/nodes-cli/rpc.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "节点CLI共享节点调用参数构建器"
   },
   {
     "sha": "966957fc666d26255f700913171b8c31b0570d9c",
@@ -2076,7 +2176,8 @@
       "src/cli/nodes-cli/register.pairing.ts",
       "src/cli/nodes-cli/register.status.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "节点CLI共享待处理配对表"
   },
   {
     "sha": "555eb3f62c2fe6de78e6fdd4572d28c639d57d2e",
@@ -2105,7 +2206,8 @@
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "提示路径注入加固文档，安全相关"
   },
   {
     "sha": "6254e96acf16e70ceccc8f9b2abecee44d606f79",
@@ -2121,7 +2223,8 @@
       "src/agents/system-prompt.ts",
       "src/agents/workspace-run.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "加固提示路径清理，安全修复"
   },
   {
     "sha": "19f53543d25c4ae78d268b706a8d95efeed19423",
@@ -2136,7 +2239,8 @@
       "src/slack/monitor/slash.ts",
       "src/utils/chunk-items.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "工具共享chunkItems助手"
   },
   {
     "sha": "618008b483f668d1c44be67160bfca5d029b0712",
@@ -2149,7 +2253,8 @@
     "files": [
       "src/channels/plugins/directory-config.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "渠道共享目录allowFrom解析"
   },
   {
     "sha": "31d1ed351f6ee97c78b99dcdff7d6fe8b0481bde",
@@ -2162,7 +2267,8 @@
     "files": [
       "src/commands/channels/status.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "渠道去重状态账户位"
   },
   {
     "sha": "22c1210a1699a6c6bfebc784de9469c38c3785c6",
@@ -2177,7 +2283,8 @@
       "src/auto-reply/reply/directive-handling.levels.ts",
       "src/auto-reply/reply/get-reply-directives-apply.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "自动回复共享指令级别解析"
   },
   {
     "sha": "273d70741fa1780fd5182f2672a24ab29121a4c8",
@@ -2192,7 +2299,8 @@
       "src/process/supervisor/adapters/env.ts",
       "src/process/supervisor/adapters/pty.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "监督器共享环境规范化"
   },
   {
     "sha": "07be14c02de6abc4e0fb8a51991ee8ca5dbbadc5",
@@ -2205,7 +2313,8 @@
     "files": [
       "src/gateway/server-methods/chat.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关去重聊天会话中止流程"
   },
   {
     "sha": "5b2cb8ba11c74a2127670e7db6007b9029cd69e2",
@@ -2218,7 +2327,8 @@
     "files": [
       "src/cron/service/timer.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron去重完成事件发射"
   },
   {
     "sha": "1d7b2bc9c80fbb6764d9b0928d1964411616db5f",
@@ -2244,7 +2354,8 @@
     "files": [
       "src/infra/outbound/deliver.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站去重插件出站上下文"
   },
   {
     "sha": "cd44a0d01e9fe195dcc6b031b8597957257d3571",
@@ -2301,7 +2412,8 @@
     "files": [
       "src/cron/service/timer.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron共享可运行作业过滤器"
   },
   {
     "sha": "2679089e9e4b5f4d44240bf08abe9ea189a171ac",
@@ -2314,7 +2426,8 @@
     "files": [
       "src/cron/service/jobs.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron去重下次运行重新计算循环"
   },
   {
     "sha": "c95a61aa9d6b12e90d4143affc7a2418014dd2c1",
@@ -2327,7 +2440,8 @@
     "files": [
       "src/cron/service/ops.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "cron去重只读加载流程"
   },
   {
     "sha": "73a97ee255391f1dcaca70f4db4468abbf413975",
@@ -2343,7 +2457,8 @@
       "src/gateway/server-methods/nodes.helpers.ts",
       "src/gateway/server-methods/nodes.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关共享节点调用错误处理"
   },
   {
     "sha": "b1dca644bc014f594139c08ce5f78b2f52e562a4",
@@ -2358,7 +2473,8 @@
       "src/gateway/server-methods/restart-request.ts",
       "src/gateway/server-methods/update.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关共享重启请求解析"
   },
   {
     "sha": "b743e652c0a00e673cd2962a35ed718850566d2e",
@@ -2374,7 +2490,8 @@
       "src/gateway/server-methods/exec-approvals.ts",
       "src/gateway/server-methods/update.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关重用共享验证器+baseHash"
   },
   {
     "sha": "71cee673b2ef2e637120c247cf315afa644f076b",
@@ -2388,7 +2505,8 @@
       "src/gateway/server-methods/sessions.ts",
       "src/gateway/server-methods/wizard.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关满足server-method lint，核心引擎"
   },
   {
     "sha": "dc5d23484854aad5dbf7beefd961e19242cb8794",
@@ -2403,7 +2521,8 @@
       "src/gateway/server-methods/validation.ts",
       "src/gateway/server-methods/wizard.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关共享server-method参数验证"
   },
   {
     "sha": "a5cbd036deb002496a0b6ec7e10bd685fdbcdee8",
@@ -2416,7 +2535,8 @@
     "files": [
       "src/gateway/server-methods/wizard.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关去重向导参数验证"
   },
   {
     "sha": "260a514467d99b168a9439a6ad993327d5a8add9",
@@ -2443,7 +2563,8 @@
     "files": [
       "src/channels/plugins/onboarding/whatsapp.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "入门去重WhatsApp所有者白名单"
   },
   {
     "sha": "e84b20a52755a526403269c167dd5fd35768c21f",
@@ -2458,7 +2579,8 @@
       "src/channels/plugins/status-issues/shared.ts",
       "src/channels/plugins/status-issues/telegram.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "状态问题共享启用/配置账户门控"
   },
   {
     "sha": "4aaafe532256368f08a8655dc4a8215b98d30b22",
@@ -2473,7 +2595,8 @@
       "src/infra/net/ssrf.ts",
       "src/slack/monitor/media.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网络共享主机名规范化"
   },
   {
     "sha": "d5ee766afe786dd6ee50ac40cdaede420f894d28",
@@ -2486,7 +2609,8 @@
     "files": [
       "src/infra/outbound/deliver.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站去重渠道处理器参数"
   },
   {
     "sha": "00c91c3678bac82ffc7e8592b10826818a92b25b",
@@ -2499,7 +2623,8 @@
     "files": [
       "src/infra/outbound/delivery-queue.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站去重排队传递参数类型"
   },
   {
     "sha": "4ab25a2889e01ade62322ff9e6b636a43a16574c",
@@ -2512,7 +2637,8 @@
     "files": [
       "src/infra/outbound/message.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站重用消息网关调用"
   },
   {
     "sha": "14fb2c05b1331223e4063a376b5f8ae8786eef31",
@@ -2520,7 +2646,7 @@
     "pr": "#15026",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "UI",
     "conflict_risk": "HIGH",
     "files": [
       "CHANGELOG.md",
@@ -2533,7 +2659,8 @@
       "ui/src/ui/controllers/chat.test.ts",
       "ui/src/ui/controllers/chat.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关/控制UI：中止时保留部分输出，UI增强"
   },
   {
     "sha": "57d5a8df86ffb43aaf9a9f8b5bf74bda20df1906",
@@ -2546,7 +2673,8 @@
     "files": [
       "src/infra/outbound/target-resolver.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站去重目录列表调用"
   },
   {
     "sha": "b6871d9c0f6ec423e9abf3803a34e397b8563e01",
@@ -2559,7 +2687,8 @@
     "files": [
       "src/infra/outbound/message-action-params.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "出站去重附件水合"
   },
   {
     "sha": "f03ea76db30ec10c8f3040f3260cc4583486a518",
@@ -2625,7 +2754,8 @@
       "src/gateway/protocol/schema/config.ts",
       "src/gateway/protocol/schema/cron.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "协议去重cron/配置模式"
   },
   {
     "sha": "cb46ea037f5f36359ee7e0dbd902b4468bf0d3c5",
@@ -2640,7 +2770,8 @@
       "src/commands/models/set.ts",
       "src/commands/models/shared.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "模型去重设置默认模型更新"
   },
   {
     "sha": "dece9e8b0786efef78aac743dd68565064970d70",
@@ -2655,7 +2786,8 @@
       "src/infra/package-json.ts",
       "src/infra/update-runner.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "更新共享package.json读取器"
   },
   {
     "sha": "32221e194acaf0b06e075d3186e10eaccb1450b2",
@@ -2670,7 +2802,8 @@
       "src/slack/probe.ts",
       "src/utils/with-timeout.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "探测共享withTimeout"
   },
   {
     "sha": "5ecc364d55a8b22d32fea73de60f1bd0e7049bcb",
@@ -2678,12 +2811,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/daemon/systemd.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "守护进程删除未使用的formatGatewayServiceDescription导入"
   },
   {
     "sha": "0dbc51aa55bd9fa9f174a15d58d5077673340fe3",
@@ -2700,7 +2834,8 @@
       "src/daemon/schtasks.ts",
       "src/daemon/systemd.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "守护进程共享服务描述解析"
   },
   {
     "sha": "58cf37ceeb08a8a9b7e8de9e73a6a0b4076b96e4",
@@ -2713,7 +2848,8 @@
     "files": [
       "src/memory/batch-gemini.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存在gemini中重用批量工具"
   },
   {
     "sha": "652318e56a23b60734210bcf1b3964031d34d170",
@@ -2729,7 +2865,8 @@
       "src/media-understanding/providers/openai/audio.ts",
       "src/media-understanding/providers/shared.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "媒体共享HTTP错误处理"
   },
   {
     "sha": "d8691ff4ec4c4467b7d49c07743903e504c8b2db",
@@ -2744,7 +2881,8 @@
       "src/memory/sync-progress.ts",
       "src/memory/sync-session-files.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存共享同步进度助手"
   },
   {
     "sha": "8251f7c235b99554d4ec6fd950238067ad0a3923",
@@ -2759,7 +2897,8 @@
       "src/memory/batch-utils.ts",
       "src/memory/batch-voyage.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存去重批量助手"
   },
   {
     "sha": "ae1880acf6be5271e7f1308859382870e9301bc2",
@@ -2774,7 +2913,8 @@
       "src/hooks/frontmatter.ts",
       "src/shared/frontmatter.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "前置事项共享openclaw清单解析"
   },
   {
     "sha": "fddf8a6f4ae77fbd0848858c145273376c9ab530",
@@ -2782,13 +2922,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/context.test.ts",
       "src/agents/pi-extensions/session-manager-runtime-registry.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "PI扩展运行时注册表测试性能优化"
   },
   {
     "sha": "412c1d0af17e6ee9cb72a5b04945cc68234b112d",
@@ -2796,13 +2937,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/logging/diagnostic.test.ts",
       "src/logging/logger.import-side-effects.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "日志导入副作用测试性能优化"
   },
   {
     "sha": "166cf6a3e04c7df42bea70a7ad5ce2b9df46d147",
@@ -2821,7 +2963,8 @@
       "src/agents/tools/web-search.ts",
       "src/agents/tools/web-shared.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Web抓取限制响应体大小，使用中渠道修复"
   },
   {
     "sha": "fd3d452f1f622aa23e64384e9367624553eda066",
@@ -2829,12 +2972,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "CI",
     "conflict_risk": "HIGH",
     "files": [
       "ui/src/ui/controllers/cron.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CI修复UI cron测试模拟签名"
   },
   {
     "sha": "fdd0e78d1ba1768eb2476df7a2244be25c14e2a4",
@@ -2842,13 +2986,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/exec-approvals.socket-defaults.test.ts",
       "src/infra/exec-approvals.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "执行批准socket默认测试性能优化"
   },
   {
     "sha": "60ce38d216fa9ea7a98d10d408f035ed988c2884",
@@ -2867,15 +3012,16 @@
     "sha": "acb2a1ce37769e1fad01939d9d891bacb0aef28a",
     "message": "perf(test): fold discord voice hardening into web media suite",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/discord/send.voice-message.security.test.ts",
       "src/web/media.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Discord语音加固测试，不使用"
   },
   {
     "sha": "ba3a0e7adb27f3597ba2da90c65ba1972c91f0f7",
@@ -2883,13 +3029,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/gateway/gateway-misc.test.ts",
       "src/gateway/server-utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关服务器工具测试性能优化"
   },
   {
     "sha": "3a7b1b36b64b4cb81ac14424a48f5183af77749f",
@@ -2897,7 +3044,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/shared/chat-content.test.ts",
@@ -2905,7 +3052,8 @@
       "src/shared/node-match.test.ts",
       "src/shared/shared-misc.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "共享工具测试套件性能优化"
   },
   {
     "sha": "3830a4b58eedf0077212106eeab9f5a347dd0c71",
@@ -2913,13 +3061,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/acp/session-mapper.test.ts",
       "src/acp/session.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "ACP会话存储断言测试性能优化"
   },
   {
     "sha": "6288c5177434f1bab6577fdc496e2be6f84cd3d7",
@@ -2927,13 +3076,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/security/audit-extra.sync.test.ts",
       "src/security/secret-equal.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "密钥相等断言测试性能优化"
   },
   {
     "sha": "a508c34731d685a94ca440437acf57f3af1ac766",
@@ -2941,13 +3091,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/signal/daemon.test.ts",
       "src/signal/probe.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "信号守护进程日志解析测试性能优化"
   },
   {
     "sha": "5baa08ed13bc0f16371e090cd38ec73c7491dfa4",
@@ -2955,13 +3106,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/commands/cleanup-utils.test.ts",
       "src/commands/model-default.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "模型默认断言测试性能优化"
   },
   {
     "sha": "55fd88e96712504f8217f3116ffe2c4b1de0ab18",
@@ -2969,7 +3121,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/utils/boolean.test.ts",
@@ -2977,7 +3129,8 @@
       "src/utils/shell-argv.test.ts",
       "src/utils/utils-misc.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "工具解析助手测试性能优化"
   },
   {
     "sha": "725f63f72401405b5398563b74573dd98eecab53",
@@ -2985,13 +3138,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/process/restart-recovery.test.ts",
       "src/process/spawn-utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "重启恢复助手测试性能优化"
   },
   {
     "sha": "c82dc02b4d4089d46b15994f24cbba1375eb0c3b",
@@ -2999,13 +3153,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/tui/commands.test.ts",
       "src/tui/tui.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "TUI命令解析测试性能优化"
   },
   {
     "sha": "2cf060f7744112a3793612c47e060066b65d6ebc",
@@ -3013,14 +3168,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/media-understanding/attachments.ssrf.test.ts",
       "src/media-understanding/media-understanding-misc.test.ts",
       "src/media-understanding/scope.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "媒体理解测试套件性能优化"
   },
   {
     "sha": "5529473af98f7a5b8744f70df24534adb0dd350b",
@@ -3028,13 +3184,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/browser/browser-utils.test.ts",
       "src/browser/server-context.list-known-profile-names.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "浏览器服务器上下文助手测试性能优化"
   },
   {
     "sha": "5e3b211d932fbaca32a89a94c103bff202452251",
@@ -3042,13 +3199,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/hooks/gmail-watcher.test.ts",
       "src/hooks/install.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Gmail监视器断言测试性能优化"
   },
   {
     "sha": "3fd40fc5a3a007f7eb75837e66ef4c31f55503a0",
@@ -3056,13 +3214,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/media/constants.test.ts",
       "src/media/mime.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "媒体常量断言测试性能优化"
   },
   {
     "sha": "f934725ccdbedce29a18354e128641eba4cb758a",
@@ -3070,7 +3229,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/channel-web.barrel.test.ts",
@@ -3078,7 +3237,8 @@
       "src/channels/chat-type.test.ts",
       "src/channels/web/index.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "渠道测试套件性能优化"
   },
   {
     "sha": "5709b3070003d578b927d4dc5a1ddc26505c3337",
@@ -3086,7 +3246,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/config-misc.test.ts",
@@ -3095,7 +3255,8 @@
       "src/config/config.web-search-provider.test.ts",
       "src/config/ui-seam-color.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "配置测试套件性能优化"
   },
   {
     "sha": "2d5004cee481ace6a63c883440cab0b6c4d64e92",
@@ -3103,7 +3264,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/cli/cli-utils.test.ts",
@@ -3114,7 +3275,8 @@
       "src/cli/respawn-policy.test.ts",
       "src/cli/wait.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CLI工具测试性能优化"
   },
   {
     "sha": "1287abe0b5a1ecd7b4fd363cb1a90bc7a29a82b0",
@@ -3122,7 +3284,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/browser/browser-utils.test.ts",
@@ -3132,7 +3294,8 @@
       "src/browser/routes/utils.test.ts",
       "src/browser/target-id.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "浏览器工具测试性能优化"
   },
   {
     "sha": "a91bcd2cf477efe14199f4b9b9a10421f6ce0e29",
@@ -3140,12 +3303,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/gateway-lock.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "避免网关锁测试中的假定时器挂起"
   },
   {
     "sha": "67bfe8fb803f71742a8d6344e4a7dd02c95e65a0",
@@ -3153,7 +3317,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "scripts/test-parallel.mjs",
@@ -3170,7 +3334,8 @@
       "src/gateway/server-restart-deferral.test.ts",
       "src/gateway/server.nodes.late-invoke.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关单元测试套件性能优化"
   },
   {
     "sha": "be4a490c237c4de3f39e73fa297f5382e8dde57f",
@@ -3183,7 +3348,8 @@
     "files": [
       "src/cli/update-cli.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试修复更新CLI环境恢复"
   },
   {
     "sha": "e9ed5febc5aabfc770df23ab4e6c2d4194bd92f1",
@@ -3196,7 +3362,8 @@
     "files": [
       "src/agents/models-config.falls-back-default-baseurl-token-exchange-fails.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重令牌交换环境清理"
   },
   {
     "sha": "72baa58edde5aebc16dccb83f8d1bb19da2018b6",
@@ -3209,7 +3376,8 @@
     "files": [
       "src/agents/models-config.auto-injects-github-copilot-provider-token-is.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试修复copilot环境恢复"
   },
   {
     "sha": "76015aab234cd09332e5754ae8ddb19c2e49a43b",
@@ -3222,7 +3390,8 @@
     "files": [
       "src/agents/models-config.uses-first-github-copilot-profile-env-tokens.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重copilot环境恢复"
   },
   {
     "sha": "115cfb4430d0526ea64f7a9f5f77c3d81da75e3e",
@@ -3230,7 +3399,7 @@
     "pr": "#14535",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "NICE-TO-HAVE",
     "conflict_risk": "HIGH",
     "files": [
       "CHANGELOG.md",
@@ -3259,7 +3428,8 @@
       "ui/src/ui/views/cron.test.ts",
       "ui/src/ui/views/cron.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关添加cron完成运行webhook，新功能"
   },
   {
     "sha": "ab000bc4110980c32e5f26045872bcacc4ef33d4",
@@ -3272,7 +3442,8 @@
     "files": [
       "src/agents/models-config.providers.qianfan.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重千帆环境恢复"
   },
   {
     "sha": "e3a93d6705988c0fb7a8cccfca4310f87cdc5cd6",
@@ -3285,7 +3456,8 @@
     "files": [
       "src/agents/pi-tools.safe-bins.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重安全二进制模拟"
   },
   {
     "sha": "7857096d297ec8b792f8bf0e3f7d713d9f15439b",
@@ -3298,7 +3470,8 @@
     "files": [
       "src/agents/model-scan.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在模型扫描中重用环境快照"
   },
   {
     "sha": "cedd520f257298acfbdfceb3d44a458a65f0cddc",
@@ -3313,7 +3486,8 @@
       "src/agents/pi-tools.safe-bins.e2e.test.ts",
       "src/test-helpers/state-dir-env.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化状态目录环境助手"
   },
   {
     "sha": "4bdb857ecadce2b4bd1f7858b116f561e6d5fcac",
@@ -3340,7 +3514,8 @@
       "src/agents/models-config.providers.minimax.test.ts",
       "src/agents/models-config.providers.nvidia.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重提供者API密钥环境恢复"
   },
   {
     "sha": "e075a33ca3d408b06ae86654aa4c34f820d91bb9",
@@ -3354,7 +3529,8 @@
       "src/commands/status.e2e.test.ts",
       "src/web/accounts.whatsapp-auth.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化oauth/配置文件环境恢复"
   },
   {
     "sha": "c07036e8134f93dd97ef33d3dafed71635dbcccb",
@@ -3382,7 +3558,8 @@
       "src/gateway/boot.test.ts",
       "src/gateway/boot.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关保持启动会话临时性，核心引擎"
   },
   {
     "sha": "fe73878dfc71081288c1cfe4c04a4b362a9f7972",
@@ -3396,7 +3573,8 @@
       "src/gateway/boot.test.ts",
       "src/gateway/boot.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关在重启间保持会话映射，核心引擎"
   },
   {
     "sha": "ee2fa5f4114cf12e8173c1eae18c0847a355653e",
@@ -3412,7 +3590,8 @@
       "src/pairing/pairing-store.test.ts",
       "src/process/exec.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在单元测试套件中重用环境快照"
   },
   {
     "sha": "07dea4c6cc2dccd0fc598237e397067fc85d9c57",
@@ -3425,7 +3604,8 @@
     "files": [
       "src/commands/auth-choice.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重认证选择环境清理"
   },
   {
     "sha": "7bb0b7d1fc72a86e6aaf56debfeddb5d1d8d4cec",
@@ -3438,7 +3618,8 @@
     "files": [
       "src/config/io.write-config.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化配置IO环境快照"
   },
   {
     "sha": "a90e007d50e14c37e3666d7eca6842b45229a35c",
@@ -3451,7 +3632,8 @@
     "files": [
       "src/gateway/server.e2e-ws-harness.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在网关WS工具中重用环境快照"
   },
   {
     "sha": "94e84e6f75294bdeccae63e321f2ec8a28ee0771",
@@ -3464,7 +3646,8 @@
     "files": [
       "src/agents/openclaw-gateway-tool.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试清理网关工具环境恢复"
   },
   {
     "sha": "e9c8540e210918f7a5c12ee12401112acdfde2f2",
@@ -3477,7 +3660,8 @@
     "files": [
       "src/agents/model-auth.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化模型认证环境恢复"
   },
   {
     "sha": "961ca61b0eb987c7bd80fcd4d0d1a0b22c8d716c",
@@ -3491,7 +3675,8 @@
       "src/commands/auth-choice.moonshot.e2e.test.ts",
       "src/commands/onboard-auth.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重入门认证环境清理"
   },
   {
     "sha": "f809ff5e55a63a40b1928962900b1bc352db27ef",
@@ -3506,7 +3691,8 @@
       "src/agents/subagent-registry.persistence.e2e.test.ts",
       "src/gateway/server-methods/usage.sessions-usage.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试重用环境快照助手"
   },
   {
     "sha": "d27a763eec2b18d67765043bf280cfc08f1e6f36",
@@ -3519,7 +3705,8 @@
     "files": [
       "src/config/home-env.test-harness.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在临时主目录工具中重用环境助手"
   },
   {
     "sha": "abd009b092664ab78429476180e6db68fcd2633c",
@@ -3532,7 +3719,8 @@
     "files": [
       "src/gateway/openresponses-http.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重开放响应服务器设置"
   },
   {
     "sha": "f0e373b82ee344ae0bb6b1f4b70adb8a141db86a",
@@ -3546,7 +3734,8 @@
       "src/media/store.redirect.test.ts",
       "src/web/media.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化状态目录环境恢复"
   },
   {
     "sha": "35ab521e07d946fa0960ac7575b7f175aa214d00",
@@ -3559,7 +3748,8 @@
     "files": [
       "src/gateway/server.models-voicewake-misc.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试简化语音唤醒环境清理"
   },
   {
     "sha": "d8d9d3724f9a8cf3292949ea69ae5383a775e263",
@@ -3585,7 +3775,8 @@
     "files": [
       "CHANGELOG.md"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话间来源安全修复文档，安全相关"
   },
   {
     "sha": "a68ed3f64c5715c168e1411aecc7bdc2083fde4e",
@@ -3598,7 +3789,8 @@
     "files": [
       "src/gateway/call.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在网关调用测试中重用环境快照"
   },
   {
     "sha": "31980bcaf1b8a4b4c49267b712fcd4df911a6bd7",
@@ -3614,7 +3806,8 @@
       "src/gateway/server.talk-config.e2e.test.ts",
       "src/gateway/test-helpers.server.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试去重网关环境恢复"
   },
   {
     "sha": "70f86e326d97ef5b9ba1e7eccb0cf5e6991fc934",
@@ -3630,7 +3823,8 @@
       "src/media/store.test.ts",
       "src/test-utils/env.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试重用共享环境快照"
   },
   {
     "sha": "bed0e076205cc040416c588645e7b7cd444d5413",
@@ -3638,13 +3832,14 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "REFACTOR",
     "conflict_risk": "LOW",
     "files": [
       "src/cli/plugins-cli.ts",
       "src/plugins/manifest-registry.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CLI安装后清除插件清单缓存"
   },
   {
     "sha": "632b71c7f84b8f805df3ae59c35c25654b79505a",
@@ -3652,12 +3847,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/config.nix-integration-u3-u5-u9.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试避免nix配置e2e中继承process.env"
   },
   {
     "sha": "eef13235ad0188d5d20de81d89da10fd87751bc6",
@@ -3665,14 +3861,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/openclaw-tools.subagents.sessions-spawn.allowlist.e2e.test.ts",
       "src/agents/openclaw-tools.subagents.sessions-spawn.lifecycle.e2e.test.ts",
       "src/agents/openclaw-tools.subagents.sessions-spawn.model.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试使sessions_spawn e2e工具顺序稳定"
   },
   {
     "sha": "89155aa6c63a1318ca8e628158da69bd3c06c377",
@@ -3680,12 +3877,13 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/openclaw-tools.subagents.sessions-spawn.allowlist.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "测试在工具前加载sessions_spawn工具"
   },
   {
     "sha": "bbcbabab74a3412f55f66a40402cd7735a8da34e",
@@ -3693,7 +3891,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "CI",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/bash-tools.process.ts",
@@ -3706,7 +3904,8 @@
       "src/cli/program.test-mocks.ts",
       "src/commands/status.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "CI修复e2e模拟和工具模式"
   },
   {
     "sha": "0e2d8b8a1ee052437fce80a58e6fa89d206d19d0",
@@ -3714,7 +3913,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/channels/plugins/actions/actions.test.ts",
@@ -3724,7 +3923,8 @@
       "src/channels/plugins/actions/telegram.test.ts",
       "src/channels/plugins/slack.actions.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "渠道操作测试套件性能优化"
   },
   {
     "sha": "c5288300a1ad385fbc4d1d1a3451e7f9cb29f6dc",
@@ -3732,7 +3932,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/inbound.test.ts",
@@ -3741,15 +3941,16 @@
       "src/auto-reply/reply/reply-flow.test.ts",
       "src/auto-reply/reply/reply-routing.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "回复流程测试套件性能优化"
   },
   {
     "sha": "a7f6c956751a3cc7d79990ef847e0a6270f8baaf",
     "message": "perf(test): consolidate slack monitor suites",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/slack/monitor/channel-config.test.ts",
@@ -3761,7 +3962,8 @@
       "src/slack/monitor/monitor.test.ts",
       "src/slack/monitor/thread-resolution.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Slack监视器测试套件性能优化，不使用"
   },
   {
     "sha": "74294a4653425097389f43f3b9a44d6436a478f0",
@@ -3769,7 +3971,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/web/auto-reply/mentions.test.ts",
@@ -3780,7 +3982,8 @@
       "src/web/auto-reply/web-auto-reply-monitor.test.ts",
       "src/web/auto-reply/web-auto-reply-utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Web自动回复测试套件性能优化"
   },
   {
     "sha": "c59a472ca2256de1f6e8bc5ffe62a021c70a88dc",
@@ -3788,14 +3991,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/tools/memory-tool.citations.e2e.test.ts",
       "src/agents/tools/memory-tool.does-not-crash-on-errors.e2e.test.ts",
       "src/agents/tools/memory-tool.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "内存工具e2e测试套件性能优化"
   },
   {
     "sha": "722bfaa9c968e003ea1ea407051f25ac25ce1d8e",
@@ -3803,7 +4007,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/agent-runner-utils.test.ts",
@@ -3815,7 +4019,8 @@
       "src/auto-reply/reply/session-updates.incrementcompactioncount.test.ts",
       "src/auto-reply/reply/subagents-utils.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "回复管道/状态测试套件性能优化"
   },
   {
     "sha": "37086d0c3e4cb72d2ecab8c4b3b0f5473739a3c9",
@@ -3823,7 +4028,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/agents/tools/sessions-announce-target.e2e.test.ts",
@@ -3832,7 +4037,8 @@
       "src/agents/tools/sessions-send-tool.gating.e2e.test.ts",
       "src/agents/tools/sessions.e2e.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话工具e2e测试套件性能优化"
   },
   {
     "sha": "a1c50b4ee36091de70c739e899a6394acfe55e28",
@@ -3840,7 +4046,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/channels/plugins/base-types-assignability.test.ts",
@@ -3857,7 +4063,8 @@
       "src/channels/plugins/plugins-channel.test.ts",
       "src/channels/plugins/plugins-core.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "渠道插件测试套件性能优化"
   },
   {
     "sha": "d75cd4078729c662aa72084ed831429dc350ba52",
@@ -3865,7 +4072,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/formatting.test.ts",
@@ -3875,7 +4082,8 @@
       "src/auto-reply/reply/response-prefix-template.test.ts",
       "src/auto-reply/reply/typing.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "回复工具测试套件性能优化"
   },
   {
     "sha": "34b088ede63d23190f81c7e38518a92df9bcf77c",
@@ -3883,7 +4091,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/infra/outbound/delivery-queue.test.ts",
@@ -3896,7 +4104,8 @@
       "src/infra/outbound/payloads.test.ts",
       "src/infra/outbound/targets.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "基础设施出站测试套件性能优化"
   },
   {
     "sha": "36b5f0c9a8e68b24c0921e1296e38db3c0f5f0d9",
@@ -3904,7 +4113,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/gateway/server-methods/agent-job.test.ts",
@@ -3916,7 +4125,8 @@
       "src/gateway/server-methods/logs.test.ts",
       "src/gateway/server-methods/server-methods.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "网关server-methods测试套件性能优化"
   },
   {
     "sha": "704c8ed530c484f58c8bb2f4736b1ed1938a4c07",
@@ -3924,7 +4134,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/config/sessions/metadata.test.ts",
@@ -3935,15 +4145,16 @@
       "src/config/sessions/store.undefined-path.test.ts",
       "src/config/sessions/transcript.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话配置测试套件性能优化"
   },
   {
     "sha": "2158b09b9dc52706d00ca8811f41195047c21d4b",
     "message": "perf(test): consolidate discord monitor utils",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/discord/monitor/agent-components.test.ts",
@@ -3954,7 +4165,8 @@
       "src/discord/monitor/presence.test.ts",
       "src/discord/monitor/threading.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Discord监视器工具测试套件性能优化，不使用"
   },
   {
     "sha": "ed276d3e50f367710ceb4b353e8d8e1881808c54",
@@ -3962,7 +4174,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/inbound-context.providers-contract.test.ts",
@@ -3970,7 +4182,8 @@
       "src/auto-reply/reply/inbound-text.test.ts",
       "src/auto-reply/reply/inbound.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "入站回复测试套件性能优化"
   },
   {
     "sha": "53ec78319d7cb89e7a2cdd998dbc15466a85d000",
@@ -3978,14 +4191,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/session-resets.test.ts",
       "src/auto-reply/reply/session-usage.test.ts",
       "src/auto-reply/reply/session.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "会话测试套件性能优化"
   },
   {
     "sha": "51709c63fe18e0e7b5effdcad5393613da57664c",
@@ -3993,14 +4207,15 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/model-selection.inherit-parent.test.ts",
       "src/auto-reply/reply/model-selection.override-respected.test.ts",
       "src/auto-reply/reply/model-selection.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "模型选择测试套件性能优化"
   },
   {
     "sha": "f8925b758860a38a67d887c3608514fd8f36fc54",
@@ -4008,7 +4223,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/commands-approve.test.ts",
@@ -4018,15 +4233,16 @@
       "src/auto-reply/reply/commands-policy.test.ts",
       "src/auto-reply/reply/commands.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "回复命令测试套件性能优化"
   },
   {
     "sha": "023091ded3563f9cbcffc1ee0a2788e4129f8be6",
     "message": "perf(test): consolidate slack tool-result suites",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/slack/monitor.tool-result.forces-thread-replies-replytoid-is-set.test.ts",
@@ -4034,7 +4250,8 @@
       "src/slack/monitor.tool-result.test.ts",
       "src/slack/monitor.tool-result.threads-top-level-replies-replytomode-is-all.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Slack工具结果测试套件性能优化，不使用"
   },
   {
     "sha": "ce922915abd1ba9513bb282fa3df541683cebaeb",
@@ -4042,7 +4259,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/send.caption-split.test.ts",
@@ -4054,7 +4271,8 @@
       "src/telegram/send.test.ts",
       "src/telegram/send.video-note.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram发送测试套件性能优化"
   },
   {
     "sha": "f749365b1ce2aaed4eab7297cc4ffb203a37e5e5",
@@ -4062,7 +4280,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/telegram/bot.create-telegram-bot.accepts-group-messages-mentionpatterns-match-without-botusername.test.ts",
@@ -4076,20 +4294,22 @@
       "src/telegram/bot.create-telegram-bot.sends-replies-without-native-reply-threading.test.ts",
       "src/telegram/bot.create-telegram-bot.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Telegram创建机器人测试套件性能优化"
   },
   {
     "sha": "4fc72226fa68e24354ac806b1284558a10ce3814",
     "message": "perf(test): speed up slack slash suite",
     "pr": "",
-    "action": "OPTIONAL",
-    "priority": "P3",
-    "category": "UNKNOWN",
+    "action": "SKIP",
+    "priority": "P5",
+    "category": "UNUSED-CHANNEL",
     "conflict_risk": "LOW",
     "files": [
       "src/slack/monitor/slash.test.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "Slack斜杠测试性能优化，不使用"
   },
   {
     "sha": "def74465eb8f689300e253c1237a1069d6469cfa",
@@ -4097,7 +4317,7 @@
     "pr": "",
     "action": "OPTIONAL",
     "priority": "P3",
-    "category": "UNKNOWN",
+    "category": "TEST",
     "conflict_risk": "LOW",
     "files": [
       "src/auto-reply/reply/agent-runner.heartbeat-typing.runreplyagent-typing-heartbeat.test.ts",
@@ -4107,7 +4327,8 @@
       "src/auto-reply/reply/agent-runner.runreplyagent.test.ts",
       "src/auto-reply/reply/agent-runner.test-harness.mocks.ts"
     ],
-    "related_commits": []
+    "related_commits": [],
+    "ai_note": "runReplyAgent测试套件性能优化"
   },
   {
     "sha": "a91553c7cf69688b1246d0e4e6774be0fb0ca734",
