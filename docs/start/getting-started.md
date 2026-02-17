@@ -27,74 +27,64 @@ title: "入门指南"
 
 ## 快速设置（CLI）
 
-<Steps>
-  <Step title="安装 OpenClaw（推荐）">
-    <Tabs>
-      <Tab title="macOS/Linux">
-        ```bash
-        curl -fsSL https://clawd.org.cn/install.sh | bash
-        ```
-      </Tab>
-      <Tab title="Windows (PowerShell)">
-        ```powershell
-        iwr -useb https://clawd.org.cn/install.ps1 | iex
-        ```
-      </Tab>
-    </Tabs>
+### 1. 安装 OpenClaw（推荐）
 
-    <Note>
-    其他安装方法和要求：[安装](/install)。
-    </Note>
+**macOS/Linux：**
 
-  </Step>
-  <Step title="运行引导向导">
-    ```bash
-    openclaw-cn onboard --install-daemon
-    ```
+```bash
+curl -fsSL https://clawd.org.cn/install.sh | bash
+```
 
-    向导配置认证、网关设置和可选频道。
-    详情请参见 [引导向导](/start/wizard)。
+**Windows (PowerShell)：**
 
-  </Step>
-  <Step title="检查网关">
-    如果您安装了服务，它应该已经在运行：
+```powershell
+iwr -useb https://clawd.org.cn/install.ps1 | iex
+```
 
-    ```bash
-    openclaw-cn gateway status
-    ```
+> **注意：** 其他安装方法和要求：[安装](/install)。
 
-  </Step>
-  <Step title="打开控制 UI">
-    ```bash
-    openclaw-cn dashboard
-    ```
-  </Step>
-</Steps>
+### 2. 运行引导向导
 
-<Check>
-如果控制 UI 加载成功，您的网关已准备就绪。
-</Check>
+```bash
+openclaw-cn onboard --install-daemon
+```
+
+向导配置认证、网关设置和可选频道。
+详情请参见 [引导向导](/start/wizard)。
+
+### 3. 检查网关
+
+如果您安装了服务，它应该已经在运行：
+
+```bash
+openclaw-cn gateway status
+```
+
+### 4. 打开控制 UI
+
+```bash
+openclaw-cn dashboard
+```
+
+> **✓** 如果控制 UI 加载成功，您的网关已准备就绪。
 
 ## 可选检查和附加功能
 
-<AccordionGroup>
-  <Accordion title="在前台运行网关">
-    适用于快速测试或故障排除。
+#### 在前台运行网关
 
-    ```bash
-    openclaw-cn gateway --port 18789
-    ```
+适用于快速测试或故障排除。
 
-  </Accordion>
-  <Accordion title="发送测试消息">
-    需要配置的频道。
+```bash
+openclaw-cn gateway --port 18789
+```
 
-    ```bash
-    openclaw-cn message send --target +15555550123 --message "来自 OpenClaw 的问候"
-    ```
+#### 发送测试消息
 
-  </Accordion>
-</AccordionGroup>
+需要配置的频道。
+
+```bash
+openclaw-cn message send --target +15555550123 --message "来自 OpenClaw 的问候"
+```
 
 ## 有用的环境变量
 
