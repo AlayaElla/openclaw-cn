@@ -48,9 +48,17 @@ export function handleMessageUpdate(
     assistantEvent && typeof assistantEvent === "object"
       ? (assistantEvent as Record<string, unknown>)
       : undefined;
+
   const evtType = typeof assistantRecord?.type === "string" ? assistantRecord.type : "";
 
-  if (evtType !== "text_delta" && evtType !== "text_start" && evtType !== "text_end") {
+  if (
+    evtType !== "text_delta" &&
+    evtType !== "text_start" &&
+    evtType !== "text_end" &&
+    evtType !== "thinking_delta" &&
+    evtType !== "thinking_start" &&
+    evtType !== "thinking_end"
+  ) {
     return;
   }
 
@@ -74,8 +82,6 @@ export function handleMessageUpdate(
     if (delta) {
       chunk = delta;
     } else if (content) {
-      // KNOWN: Some providers resend full content on `text_end`.
-      // We only append a suffix (or nothing) to keep output monotonic.
       if (content.startsWith(ctx.state.deltaBuffer)) {
         chunk = content.slice(ctx.state.deltaBuffer.length);
       } else if (ctx.state.deltaBuffer.startsWith(content)) {
@@ -95,9 +101,16 @@ export function handleMessageUpdate(
     }
   }
 
-  if (ctx.state.streamReasoning) {
-    // Handle partial <think> tags: stream whatever reasoning is visible so far.
-    ctx.emitReasoningStream(extractThinkingFromTaggedStream(ctx.state.deltaBuffer));
+  // Determine if we are currently inside a <think> block from a text_delta stream
+  const containsThinkStart = ctx.state.deltaBuffer.includes("<think>");
+  const containsThinkEnd = ctx.state.deltaBuffer.includes("</think>");
+  const isInsideThinkBlock = containsThinkStart && !containsThinkEnd;
+
+  if (ctx.state.streamReasoning || isInsideThinkBlock) {
+    const reasoningToEmit = extractThinkingFromTaggedStream(ctx.state.deltaBuffer);
+    if (reasoningToEmit) {
+      ctx.emitReasoningStream(reasoningToEmit);
+    }
   }
 
   const next = ctx
@@ -175,16 +188,38 @@ export function handleMessageEnd(
     rawThinking: extractAssistantThinking(assistantMessage),
   });
 
-  const text = ctx.stripBlockTags(rawText, { thinking: false, final: false });
-  const rawThinking =
-    ctx.state.includeReasoning || ctx.state.streamReasoning
-      ? extractAssistantThinking(assistantMessage) || extractThinkingFromTaggedText(rawText)
-      : "";
-  const formattedReasoning = rawThinking ? formatReasoningMessage(rawThinking) : "";
+  // 2. Extract structured thinking from message content blocks (if any)
+  const blockThinking = extractAssistantThinking(assistantMessage);
+
+  // 3. Combine with any tags found in final text
+  const tagThinking = extractThinkingFromTaggedText(rawText);
+  const rawThinking = [blockThinking, tagThinking].filter(Boolean).join("\n").trim();
+
+  const hasAnyThinking = rawThinking.length > 0;
+  const formattedReasoning = hasAnyThinking ? formatReasoningMessage(rawThinking) : "";
+
+  // Prepend formatted reasoning to the text stream if feature is enabled
+  const cleanText = extractAssistantText(assistantMessage);
+  const finalText =
+    ctx.state.includeReasoning && hasAnyThinking
+      ? `${formattedReasoning}\n\n${cleanText}`
+      : cleanText;
+
+  // Sync the final combined text back to the gateway's buffer so the TUI sees it
+  const text = finalText;
+  if (ctx.state.includeReasoning && hasAnyThinking) {
+    emitAgentEvent({
+      runId: ctx.params.runId,
+      stream: "assistant",
+      data: {
+        text,
+      },
+    });
+  }
 
   const addedDuringMessage = ctx.state.assistantTexts.length > ctx.state.assistantTextBaseline;
   const chunkerHasBuffered = ctx.blockChunker?.hasBuffered() ?? false;
-  ctx.finalizeAssistantTexts({ text, addedDuringMessage, chunkerHasBuffered });
+  ctx.finalizeAssistantTexts({ text: finalText, addedDuringMessage, chunkerHasBuffered });
 
   const onBlockReply = ctx.params.onBlockReply;
   const shouldEmitReasoning = Boolean(

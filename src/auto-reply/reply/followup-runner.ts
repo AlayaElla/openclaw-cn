@@ -200,6 +200,8 @@ export function createFollowupRunner(params: {
           storePath,
           sessionKey,
           usage,
+          lastCallUsage: runResult.meta.agentMeta?.lastCallUsage,
+          promptTokens: runResult.meta.agentMeta?.promptTokens,
           modelUsed,
           providerUsed: fallbackProvider,
           contextTokensUsed,

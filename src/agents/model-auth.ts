@@ -302,6 +302,7 @@ export function resolveEnvApiKey(provider: string): EnvApiKeyResult | null {
     // 新增：OpenAI兼容供应商环境变量映射
     siliconflow: "SILICONFLOW_API_KEY",
     dashscope: "DASHSCOPE_API_KEY",
+    "dashscope-coding-plan": "DASHSCOPE_API_KEY",
     deepseek: "DEEPSEEK_API_KEY",
     volcengine: "VOLCENGINE_API_KEY",
     xiaomi: "XIAOMI_API_KEY",

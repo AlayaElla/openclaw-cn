@@ -194,7 +194,7 @@ export function buildDashscopeModelDefinition(): ModelDefinitionConfig {
   return {
     id: DASHSCOPE_DEFAULT_MODEL_ID,
     name: "Qwen Plus",
-    reasoning: false,
+    reasoning: true,
     input: ["text"],
     cost: DASHSCOPE_DEFAULT_COST,
     contextWindow: DASHSCOPE_DEFAULT_CONTEXT_WINDOW,
@@ -207,8 +207,8 @@ export function buildDashscopeCodingPlanModelDefinition(modelId?: string): Model
   const id = modelId || DASHSCOPE_CODING_PLAN_DEFAULT_MODEL_ID;
   return {
     id,
-    name: modelId ? id : "Qwen 2.5 Coder 32B",
-    reasoning: false,
+    name: modelId ? id : "qwen3.5-plus",
+    reasoning: true,
     input: ["text"],
     cost: DASHSCOPE_DEFAULT_COST, // 复用 DashScope 成本配置
     contextWindow: DASHSCOPE_DEFAULT_CONTEXT_WINDOW,

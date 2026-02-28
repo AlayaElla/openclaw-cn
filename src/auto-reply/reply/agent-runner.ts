@@ -382,6 +382,8 @@ export async function runReplyAgent(params: {
       storePath,
       sessionKey,
       usage,
+      lastCallUsage: runResult.meta.agentMeta?.lastCallUsage,
+      promptTokens: runResult.meta.agentMeta?.promptTokens,
       modelUsed,
       providerUsed,
       contextTokensUsed,

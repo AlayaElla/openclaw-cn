@@ -12,6 +12,18 @@ export type EmbeddedPiAgentMeta = {
     cacheWrite?: number;
     total?: number;
   };
+  /** Usage from the last individual API call (not accumulated). */
+  lastCallUsage?: {
+    input?: number;
+    output?: number;
+    cacheRead?: number;
+    cacheWrite?: number;
+    total?: number;
+  };
+  /** Derived prompt tokens from the last run's usage snapshot. */
+  promptTokens?: number;
+  /** Number of auto-compactions performed during this run. */
+  compactionCount?: number;
 };
 
 export type EmbeddedPiRunMeta = {

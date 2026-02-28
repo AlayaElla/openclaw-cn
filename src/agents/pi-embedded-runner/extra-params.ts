@@ -96,6 +96,65 @@ function createStreamFnWithExtraParams(
 }
 
 /**
+ * Check if a provider is a DashScope-compatible provider.
+ */
+function isDashScopeProvider(provider: string): boolean {
+  return provider === "dashscope" || provider === "dashscope-coding-plan" || provider === "bailian";
+}
+
+/**
+ * Wrap a streamFn to inject `enable_thinking: true` for DashScope reasoning models.
+ *
+ * DashScope (Alibaba Cloud Bailian) requires `enable_thinking: true` in the
+ * request body to enable deep reasoning. The pi-ai library's openai-completions
+ * provider already handles `reasoning_content` in streaming responses, but does
+ * not send the `enable_thinking` parameter. This wrapper injects it via the
+ * `onPayload` callback, which is called with the params object before the
+ * request is sent.
+ */
+function createDashScopeReasoningStreamFn(baseStreamFn: any, provider: string): any {
+  if (!isDashScopeProvider(provider)) {
+    return undefined;
+  }
+
+  log.debug(`creating DashScope reasoning streamFn wrapper for ${provider}`);
+
+  const wrappedStreamFn = (model: any, context: any, options: any) => {
+    // Only inject enable_thinking when the model supports reasoning
+    const modelAny = model as { reasoning?: boolean };
+    if (!modelAny.reasoning) {
+      return baseStreamFn(model, context, options);
+    }
+
+    const originalOnPayload = options?.onPayload;
+    const onPayload = (payload: unknown) => {
+      // Inject enable_thinking into the request params
+      if (payload && typeof payload === "object") {
+        const payloadObj = payload as Record<string, unknown>;
+        payloadObj.enable_thinking = true;
+
+        // Map 'developer' role back to 'system' for DashScope compatibility
+        if (Array.isArray(payloadObj.messages)) {
+          for (const msg of payloadObj.messages) {
+            if (msg && typeof msg === "object" && msg.role === "developer") {
+              msg.role = "system";
+            }
+          }
+        }
+      }
+      originalOnPayload?.(payload);
+    };
+
+    return baseStreamFn(model, context, {
+      ...options,
+      onPayload,
+    });
+  };
+
+  return wrappedStreamFn;
+}
+
+/**
  * Apply extra params (like temperature) to an agent's streamFn.
  *
  * @internal Exported for testing
@@ -124,5 +183,14 @@ export function applyExtraParamsToAgent(
   if (wrappedStreamFn) {
     log.debug(`applying extraParams to agent streamFn for ${provider}/${modelId}`);
     agent.streamFn = wrappedStreamFn;
+  }
+
+  // Apply DashScope-specific reasoning wrapper (enable_thinking injection)
+  const dashScopeStreamFn = createDashScopeReasoningStreamFn(
+    agent.streamFn ?? streamSimple,
+    provider,
+  );
+  if (dashScopeStreamFn) {
+    agent.streamFn = dashScopeStreamFn;
   }
 }

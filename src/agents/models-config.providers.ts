@@ -105,6 +105,17 @@ const DASHSCOPE_DEFAULT_COST = {
   cacheWrite: 0,
 };
 
+const DASHSCOPE_CODING_PLAN_BASE_URL = "https://coding.dashscope.aliyuncs.com/v1";
+const DASHSCOPE_CODING_PLAN_DEFAULT_MODEL_ID = "qwen3.5-plus";
+const DASHSCOPE_CODING_PLAN_DEFAULT_CONTEXT_WINDOW = 1000000;
+const DASHSCOPE_CODING_PLAN_DEFAULT_MAX_TOKENS = 65536;
+const DASHSCOPE_CODING_PLAN_DEFAULT_COST = {
+  input: 0,
+  output: 0,
+  cacheRead: 0,
+  cacheWrite: 0,
+};
+
 const DEEPSEEK_BASE_URL = "https://api.deepseek.com/v1";
 const DEEPSEEK_DEFAULT_MODEL_ID = "deepseek-chat";
 const DEEPSEEK_DEFAULT_CONTEXT_WINDOW = 128000;
@@ -526,11 +537,122 @@ function buildDashscopeProvider(): ProviderConfig {
       {
         id: DASHSCOPE_DEFAULT_MODEL_ID,
         name: "Qwen Plus",
-        reasoning: false,
+        reasoning: true,
         input: ["text"],
         cost: DASHSCOPE_DEFAULT_COST,
         contextWindow: DASHSCOPE_DEFAULT_CONTEXT_WINDOW,
         maxTokens: DASHSCOPE_DEFAULT_MAX_TOKENS,
+        compat: {
+          supportsDeveloperRole: false,
+        },
+      },
+      {
+        id: "*",
+        name: "DashScope Model",
+        reasoning: true,
+        input: ["text"],
+        cost: DASHSCOPE_DEFAULT_COST,
+        contextWindow: DASHSCOPE_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: DASHSCOPE_DEFAULT_MAX_TOKENS,
+      },
+    ],
+  };
+}
+
+function buildDashscopeCodingPlanProvider(): ProviderConfig {
+  return {
+    baseUrl: DASHSCOPE_CODING_PLAN_BASE_URL,
+    api: "openai-completions",
+    models: [
+      {
+        id: DASHSCOPE_CODING_PLAN_DEFAULT_MODEL_ID,
+        name: "qwen3.5-plus",
+        reasoning: true,
+        input: ["text", "image"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 1000000,
+        maxTokens: 65536,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "qwen3-max-2026-01-23",
+        name: "Qwen 3 Max (2026-01-23)",
+        reasoning: false,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 262144,
+        maxTokens: 65536,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "qwen3-coder-next",
+        name: "Qwen 3 Coder Next",
+        reasoning: false,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 262144,
+        maxTokens: 65536,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "qwen3-coder-plus",
+        name: "Qwen 3 Coder Plus",
+        reasoning: false,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 1000000,
+        maxTokens: 65536,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "MiniMax-M2.5",
+        name: "MiniMax M2.5",
+        reasoning: true,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 204800,
+        maxTokens: 131072,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "glm-5",
+        name: "GLM-5",
+        reasoning: true,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 202752,
+        maxTokens: 16384,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "glm-4.7",
+        name: "GLM-4.7",
+        reasoning: false,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 202752,
+        maxTokens: 16384,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "kimi-k2.5",
+        name: "Kimi K2.5",
+        reasoning: true,
+        input: ["text", "image"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: 262144,
+        maxTokens: 32768,
+        compat: { supportsDeveloperRole: false },
+      },
+      {
+        id: "*",
+        name: "DashScope Coding Plan Model",
+        reasoning: false,
+        input: ["text"],
+        cost: DASHSCOPE_CODING_PLAN_DEFAULT_COST,
+        contextWindow: DASHSCOPE_CODING_PLAN_DEFAULT_CONTEXT_WINDOW,
+        maxTokens: DASHSCOPE_CODING_PLAN_DEFAULT_MAX_TOKENS,
+        compat: { supportsDeveloperRole: false },
       },
     ],
   };
@@ -674,6 +796,17 @@ export async function resolveImplicitProviders(params: {
     resolveApiKeyFromProfiles({ provider: "dashscope", store: authStore });
   if (dashscopeKey) {
     providers.dashscope = { ...buildDashscopeProvider(), apiKey: dashscopeKey };
+  }
+
+  const dashscopeCodingPlanKey =
+    resolveEnvApiKeyVarName("dashscope-coding-plan") ??
+    resolveApiKeyFromProfiles({ provider: "dashscope-coding-plan", store: authStore }) ??
+    dashscopeKey; // Fall back to regular DashScope key
+  if (dashscopeCodingPlanKey) {
+    providers["dashscope-coding-plan"] = {
+      ...buildDashscopeCodingPlanProvider(),
+      apiKey: dashscopeCodingPlanKey,
+    };
   }
 
   const deepseekKey =
